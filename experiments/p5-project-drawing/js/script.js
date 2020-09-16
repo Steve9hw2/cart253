@@ -1,8 +1,8 @@
 /**************************************************
-Template p5 project
-Pippin Barr
+Drawing Experiments
+Steve Berthiaume
 
-Here is a description of this template p5 project.
+Tests using p5 drawing and colouring functions.
 **************************************************/
 
 // setup()
