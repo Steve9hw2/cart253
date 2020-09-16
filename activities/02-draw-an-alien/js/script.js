@@ -12,13 +12,46 @@ function setup() {
     createCanvas(500,500);
     background(31, 15, 43);
 
+    // moon
+    noStroke(); // moonlight
+    fill(243, 255, 173, 100);
+    rect(200,0,440,440,210,210,210,210);
+
+    fill(225, 237, 149); // moon body
+    rect(220,20,400,400,200,200,200,200);
+
+    fill(194, 207, 116);
+    rect(340,60,50,50,30,20,25,25); // craters
+    rect(460,160,60,60,30,30,30,30);
+    rect(400,200,30,30,15,15,15,15);
+    rect(450,290,40,40,15,30,20,20);
+
+    // mountains
+    fill(56, 33, 74);
+    triangle(0,100,0,500,300,500);
+    triangle(300,500,420,350,500,500);
+
     // body
     fill(161, 171, 164);
-    noStroke();
     ellipseMode(CORNER);
-    ellipse(125, 360, 250, 300);
+    ellipse(125, 400, 250, 300);
+
+    // neck
+
+    fill(119, 128, 121);
+    ellipse(215, 400, 75, 80)
+    fill(161, 171, 164);
+    ellipse(215, 385, 75, 80)
+    fill(119, 128, 121);
+    ellipse(215, 370, 75, 80)
+    fill(161, 171, 164);
+    ellipse(215, 355, 75, 80)
+    fill(119, 128, 121);
+    ellipse(215, 340, 75, 80)
+
 
     // head
+    fill(161, 171, 164);
     rect(125, 100, 250, 300, 40, 40, 120, 120);
 
     // antennae
@@ -44,7 +77,7 @@ function setup() {
     fill(119, 128, 121);
     ellipse(160,180,100,50);
     ellipse(240,180,100,50);
-    
+
     // eyelids (cover)
     fill(161, 171, 164);
     rect(140,110,200,100);
