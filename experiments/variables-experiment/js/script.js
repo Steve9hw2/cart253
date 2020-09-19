@@ -13,9 +13,7 @@ let circle = {
   y:0,
   size:100,
   speed:2,
-  fillr:0,
-  fillg:0,
-  fillb:0,
+  fill:255
 };
 
 // setup()
@@ -32,14 +30,14 @@ function draw() {
     backgroundHue += backgroundBrightener
     background(backgroundHue);
 
-    fill(circle.fillr,circle.fillg,circle.fillb);
-    ellipse(circle.x,circle.y,circle.size);
     circle.y += circle.speed;
+    circle.y = constrain(circle.y,0,height);
+    circle.size = map(mouseY,0,height,5,500)
+    circle.fill = map(mouseX,0,width,0,255);
+    fill(circle.fill);
+    
+    ellipse(circle.x,circle.y,circle.size);
 
-    circle.fillr = random(10,255);
-    circle.fillg = random(10,255);
-    circle.fillb = random(10,255);
-    console.log(`circle.fillr: ${circle.fillr}, circle.fillb: ${circle.fillb}, circle.fillg: ${circle.fillg}`)
     console.log(`circle.x: ${circle.x}, circle.y: ${circle.y}, circle.size: ${circle.size}, circle.speed: ${circle.speed}`);
     //console.log("circle.x: " + circle.x);
   }
