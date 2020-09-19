@@ -6,12 +6,14 @@ Here is a description of this template p5 project.
 **************************************************/
 
 let backgroundHue = 0;
-let circleX = 250;
-let circleY = 250;
-let circleSize = 100;
-let circleSpeed = 1;
 let backgroundBrightener = 1
-let circleAcceleration = 0.05
+
+let circle = {
+  x:250,
+  y:0,
+  size:100,
+  speed:2,
+};
 
 // setup()
 //
@@ -26,7 +28,6 @@ function setup() {
 function draw() {
     backgroundHue += backgroundBrightener
     background(backgroundHue);
-    ellipse(circleX,circleY,circleSize);
-    circleY += circleSpeed;
-    circleSpeed += circleAcceleration
+    ellipse(circle.x,circle.y,circle.size);
+    circle.y += circle.speed;
   }
