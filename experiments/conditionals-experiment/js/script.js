@@ -6,42 +6,51 @@ Conditionals. Not much more to say.
 (I love these things)
 **************************************************/
 
-// setup()
-//
-// Description of setup() goes here.
-
-let caterpillar = {
-  x:100,
+let circle = {
+  x:0,
   y:250,
-  segmentSize:50,
+  size:100,
+  vx:1,
+  vy:1,
+  ax:0,
+  ay:0,
+  acceleration:0.1,
+  maxSpeed:3,
 }
+
 function setup() {
   createCanvas(500,500)
 }
 
-// draw()
-//
-// Description of draw() goes here.
 function draw() {
-  background(0);
-  noStroke();
-  fill(100,200,100);
+  background(55,20,150)
 
-  let x = caterpillar.x;
-  let numSegments = 7;
-
-  // while (segmentsDrawn < numSegments) {
-  // ellipse(x,caterpillar.y,caterpillar.segmentSize);
-  // x += 40;
-  // segmentsDrawn++;
-  // }
-
-  for (let i = 0; i < numSegments; i++) {
-    ellipse(x,caterpillar.y,caterpillar.segmentSize);
-    x += 40;
+  if (mouseX < circle.x) {
+    circle.ax = -circle.acceleration;
+  }
+  else {
+    circle.ax = +circle.acceleration;
   }
 
+  if (mouseY < circle.y) {
+    circle.ay = -circle.acceleration;
+  }
+  else {
+    circle.ay = +circle.acceleration;
+  }
+
+  circle.vx += circle.ax;
+  circle.vx = constrain(circle.vx,-circle.maxSpeed,circle.maxSpeed);
+  circle.vy += circle.ay;
+  circle.vy = constrain(circle.vy,-circle.maxSpeed,circle.maxSpeed);
+
+  circle.x += circle.vx;
+  circle.y += circle.vy;
+
+  ellipse(circle.x,circle.y,circle.size);
 }
+
+
 
 // lua -> js notes
 //
