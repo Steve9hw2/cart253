@@ -70,29 +70,29 @@ function setup() {
 // Runs on every frame.
 function draw() {
 
-    shapeOne.x = mouseX                             // Four squares' mouse traction
-    shapeOne.x = constrain(shapeOne.x,200,300)
-    shapeOneClone.x = mouseX
-    shapeOneClone.x = constrain(shapeOneClone.x,200,300)
-    shapeOneYAxis.y = mouseY
-    shapeOneYAxis.y = constrain(shapeOneYAxis.y,200,300)
-    shapeOneYAxisClone.y = mouseY
-    shapeOneYAxisClone.y = constrain(shapeOneYAxisClone.y,200,300)
+    shapeOne.x = mouseX;                             // Four squares' mouse traction
+    shapeOne.x = constrain(shapeOne.x,200,300);
+    shapeOneClone.x = mouseX;
+    shapeOneClone.x = constrain(shapeOneClone.x,200,300);
+    shapeOneYAxis.y = mouseY;
+    shapeOneYAxis.y = constrain(shapeOneYAxis.y,200,300);
+    shapeOneYAxisClone.y = mouseY;
+    shapeOneYAxisClone.y = constrain(shapeOneYAxisClone.y,200,300);
 
     shapeOne.size = map(mouseY,0,600,60,100);   // Change size of square using unused axis (Shape one moves on X, resizes on Y)
     shapeOneClone.size = map(mouseY,0,600,60,100);
     shapeOneYAxis.size = map(mouseX,0,600,60,100);
     shapeOneYAxisClone.size = map(mouseX,0,600,60,100);
 
-    shapeTwo.x += 1   // Diagonal movement of the spheres
-    shapeTwo.y += 1
-    shapeThree.x -= 1
-    shapeThree.y += 1
+    shapeTwo.x += 1;  // Diagonal movement of the spheres
+    shapeTwo.y += 1;
+    shapeThree.x -= 1;
+    shapeThree.y += 1;
 
-    shapeTwo.x = constrain(shapeTwo.x,0,500)  // Constraint on the spheres
-    shapeTwo.y = constrain(shapeTwo.y,0,500)
-    shapeThree.x = constrain(shapeThree.x,0,500)
-    shapeThree.y = constrain(shapeThree.y,0,500)
+    shapeTwo.x = constrain(shapeTwo.x,0,500);  // Constraint on the spheres
+    shapeTwo.y = constrain(shapeTwo.y,0,500);
+    shapeThree.x = constrain(shapeThree.x,0,500);
+    shapeThree.y = constrain(shapeThree.y,0,500);
 
     fill(shapeOne.fill.r,shapeOne.fill.g,shapeOne.fill.b);  // Creation of the four squares
     rect(shapeOne.x,shapeOne.y,shapeOne.size);
@@ -105,7 +105,7 @@ function draw() {
     fill(shapeThree.fill.r,shapeThree.fill.g,shapeThree.fill.b);
     rect(shapeThree.x,shapeThree.y,shapeThree.size,shapeThree.size,shapeThree.curvature);
 
-    colorchangetimer += 1
+    colorchangetimer += 1;
 
     if (colorchangetimer > 50) {    // After elapsed period, change color
       colorchangetimer = 0;
