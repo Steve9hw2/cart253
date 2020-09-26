@@ -9,14 +9,8 @@ Conditionals. Not much more to say.
 // setup()
 //
 // Description of setup() goes here.
-let backgrounddShade = 0;
-let circle = {
-  x:100,
-  y:250,
-  size:100,
-  speed:1,
-}
 
+let displayCircle = false;
 function setup() {
   createCanvas(500,500)
 }
@@ -25,19 +19,17 @@ function setup() {
 //
 // Description of draw() goes here.
 function draw() {
-  background(backgrounddShade)
+  background(0);
 
-  circle.x += circle.speed;
-
-fill(255);
-  if (mouseX < width/3 && circle.x < 2 * width/3) {
-    fill(255,0,0);
-  }
-  else if (mouseX < 2 * width/3) {
-    fill(0,255,0);
+  if (mouseIsPressed) {
+    displayCircle = true;
   }
   else {
-    fill(0,0,255);
+    displayCircle = false;
+  }
+
+  if (displayCircle) {
+    ellipse(250,250,100,100);
   }
 
 
