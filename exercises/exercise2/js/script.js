@@ -9,15 +9,13 @@ AKA: ReviewBrah vs. the bad Popeyes takeout
 
 let d = undefined; // distance
 
-let static = 1000;
-
-let brah = {
+let brah = {  // player object
   x:0,
   y:0,
   size:80,
 }
 
-let covid19 = {
+let popeyes19 = {   // chaser object
   x:250,
   y:250,
   size:80,
@@ -50,48 +48,48 @@ function preload() {
 
 // setup()
 function setup() {
-    createCanvas(1000,666)
+    createCanvas(1000,666)  // matching background image size
 }
 
 // draw()
 function draw() {
-    image(localeimg,0,0)
+    image(localeimg,0,0)  // background
 
-    brah.x = mouseX-75;
+    brah.x = mouseX-75;   //  player positioning
     brah.y = mouseY-75;
 
-    if (mouseX < covid19.x) {
-      covid19.ax = -covid19.acceleration;
+    if (mouseX < popeyes19.x) {   // reaction to player position
+      popeyes19.ax = -popeyes19.acceleration;
     }
     else {
-      covid19.ax = covid19.acceleration;
+      popeyes19.ax = popeyes19.acceleration;
     }
 
-    if (mouseY < covid19.y) {
-      covid19.ay = -covid19.acceleration;
+    if (mouseY < popeyes19.y) {
+      popeyes19.ay = -popeyes19.acceleration;
     }
     else {
-      covid19.ay = covid19.acceleration;
+      popeyes19.ay = popeyes19.acceleration;
     }
 
-    covid19.vx += covid19.ax;
-    covid19.vx = constrain(covid19.vx,-covid19.maxSpeed,covid19.maxSpeed)
-    covid19.vy += covid19.ay;
-    covid19.vy = constrain(covid19.vy,-covid19.maxSpeed,covid19.maxSpeed)
+    popeyes19.vx += popeyes19.ax; // movement
+    popeyes19.vx = constrain(popeyes19.vx,-popeyes19.maxSpeed,popeyes19.maxSpeed)
+    popeyes19.vy += popeyes19.ay;
+    popeyes19.vy = constrain(popeyes19.vy,-popeyes19.maxSpeed,popeyes19.maxSpeed)
 
-    covid19.x += covid19.vx;
-    covid19.y += covid19.vy;
+    popeyes19.x += popeyes19.vx;
+    popeyes19.y += popeyes19.vy;
 
-    image(brahimg,brah.x,brah.y);
+    image(brahimg,brah.x,brah.y); // draw player & chaser
+    image(popeyesimg,popeyes19.x,popeyes19.y);
 
-    image(popeyesimg,covid19.x,covid19.y);
-    console.log("covid19.x:" + covid19.x +"covid19.y:" +covid19.y)
-    d = dist(mouseX,mouseY,covid19.x,covid19.y);
-    if (d < covid19.size/2 + brah.size/2) {   // fail state
+  //  console.log("popeyes19.x:" + popeyes19.x +"popeyes19.y:" + popeyes19.y) // console log, used for debugging
+    d = dist(mouseX,mouseY,popeyes19.x,popeyes19.y);
+    if (d < popeyes19.size/2 + brah.size/2) {   // fail state
       image(originalimg,0,0);
-    //  background(120,50,0);
+    //  background(120,50,0);   // these have been commented out as i prefer the original image.
     //  image(popeyesimg,covid19.x,covid19.y);
     //  image(bruhimg,brah.x,brah.y);
       noLoop();
-    } // contact
+    }
 }
