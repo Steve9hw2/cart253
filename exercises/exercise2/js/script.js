@@ -3,23 +3,19 @@ Exercise 2
 Steve Berthiaume
 
 
-CART 253: Exercise 2- Dodge-em
+CART 253: Exercise 2- Dodge-em-
+AKA: ReviewBrah vs. the bad Popeyes takeout
 **************************************************/
 
 let d = undefined; // distance
 
 let static = 1000;
 
-let user = {
+let brah = {
   x:0,
   y:0,
-  size:100,
-  fill: {
-    r:200,
-    g:100,
-    b:0,
-  }
-};
+  size:150,
+}
 
 let covid19 = {
   x:0,
@@ -35,6 +31,16 @@ let covid19 = {
   }
 };
 
+let brahimg;
+function preload() {
+  brahimg = loadImage("assets/images/reviewbrah1.png")
+};
+
+let popeyesimg;
+function preload() {
+  popeyesimg = loadImage("assets/images/popeyes.png");
+};
+
 
 // setup()
 function setup() {
@@ -45,7 +51,7 @@ function setup() {
 
 // draw()
 function draw() {
-    background(50,0,0);
+    background(120,50,0);
 
     for (i = 0; i < static; i ++) {
       stroke(255);
@@ -54,11 +60,8 @@ function draw() {
       point(x,y);
     } // static
 
-    user.x = mouseX;
-    user.y = mouseY;
-
-    fill(user.fill.r,user.fill.g,user.fill.b);
-    ellipse(user.x,user.y,user.size);
+    brah.x = mouseX;
+    brah.y = mouseY;
 
     covid19.x += covid19.vx;
     covid19.y += covid19.vy;
@@ -66,13 +69,17 @@ function draw() {
     noStroke();
     ellipse(covid19.x,covid19.y,covid19.size)
 
+    image(brahimg,brah.x,brah.y);
+
+    image(popeyesimg,0,0);
+
     if (covid19.x > width) {
       covid19.x = 0
       covid19.y = random(0,height)
     } // screen wrapping
 
-    d = dist(user.x,user.y,covid19.x,covid19.y);
-    if (d < covid19.size/2 + user.size/2) {
+    d = dist(mouseX,mouseY,covid19.x,covid19.y);
+    if (d < covid19.size/2 + 150/2) {
       noLoop();
     } // contact
 }
