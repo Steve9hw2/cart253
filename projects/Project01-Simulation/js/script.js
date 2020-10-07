@@ -9,6 +9,7 @@ let gameState = undefined // possible assignments: intro, phaseOne, phaseTwo, ph
 let musicPlaying = false
 let jumpBool = false
 let descending = false
+let jumpStatus = 0 // number which will change to match cateOne.jumpPower, used to track the status and determine descending.
 
 // object declaration.
 let cateOne = {
@@ -17,6 +18,7 @@ let cateOne = {
   size:100,
   speed:5,
   jumpPower:10,
+  jumpTime:10,
 }
 
 // image declaration.
@@ -76,10 +78,12 @@ function draw() {
     background(120,139,245);
     layoutOne();
     musicOne();
+    jumpOne();
     if (keyIsPressed) {
       playerInput();
     }
     cateOneDraw();
+    print(jumpBool);
     }
     else if (gameState === `failOne`) {
 
@@ -129,13 +133,13 @@ function keyPressed() {
   if (keyCode === 13 && gameState === `intro`) {
     gameState = `phaseOne`
   } // Enter to start
+  if (keyCode === 32 && gameState === `phaseOne`) { // Space to jump (1)
+    jumpedOne();
+  }
 }
 
 function playerInput() {
-  if (keyCode === 32 && gameState === `phaseOne`) { // Space to jump (1)
-    jumpOne();
-  }
-  else if (keyCode === 65 && gameState === `phaseOne`) { // A for left (1)
+ if (keyCode === 65 && gameState === `phaseOne`) { // A for left (1)
     leftOne();
   }
   else if (keyCode === 68 && gameState === `phaseOne`) { // D for left (1)
@@ -155,8 +159,35 @@ function musicOne() {
   }
 }
 
+function jumpedOne() {
+  if (jumpBool === false) {
+    marioJump.play();
+    jumpBool = true
+    descending = false
+    jumpStatus = 0
+  }
+}
+
 function jumpOne() {
-  cateOne.y -= cateOne.jumpPower
+  if (jumpBool === true && descending === false) {
+  if (jumpStatus < cateOne.jumpTime) {
+  cateOne.y -= cateOne.jumpPower;
+  jumpStatus ++;
+  }
+  else if (jumpStatus === cateOne.jumpTime) {
+  cateOne.y += cateOne.jumpPower/2;
+  descending = true
+  }
+  }
+  else if (jumpBool === true && descending === true) {
+  if (jumpStatus > 0)
+  cateOne.y += cateOne.jumpPower;
+  jumpStatus --;
+  }
+  else if (jumpStatus === 0 && descending === true)
+  cateOne.y = 900;
+  descending = false;
+  //jumpBool = false;
 }
 
 function leftOne() {
