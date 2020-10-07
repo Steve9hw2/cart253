@@ -17,8 +17,8 @@ let cateOne = {
   y:900,
   size:100,
   speed:5,
-  jumpPower:10,
-  jumpTime:10,
+  jumpPower:20,
+  jumpTime:20,
 }
 
 // image declaration.
@@ -175,29 +175,36 @@ function jumpOne() {
   jumpStatus ++;
   }
   else if (jumpStatus === cateOne.jumpTime) {
-  cateOne.y += cateOne.jumpPower/2;
+  cateOne.y -= cateOne.jumpPower/2;
   descending = true
   }
   }
   else if (jumpBool === true && descending === true) {
-  if (jumpStatus > 0)
+  if (jumpStatus > 0) {
   cateOne.y += cateOne.jumpPower;
   jumpStatus --;
   }
-  else if (jumpStatus === 0 && descending === true)
+  else if (jumpStatus <= 0 && descending === true) {
   cateOne.y = 900;
   descending = false;
-  //jumpBool = false;
+  jumpBool = false;
+  print(`jump has been reset.`)
+}
+}
 }
 
 function leftOne() {
   cateOne.x -= cateOne.speed
   cateOne.x = constrain(cateOne.x,100,2300);
+  // descending = false;
+  // jumpBool = false;
 }
 
 function rightOne() {
   cateOne.x += cateOne.speed
   cateOne.x = constrain(cateOne.x,100,2300);
+  // descending = false;
+  // jumpBool = false;
 }
 
 function cateOneDraw() {
@@ -208,6 +215,6 @@ function cateOneDraw() {
   image(cateJump,cateOne.x,cateOne.y)
   }
   else if (jumpBool === true && descending === true) {
-  image(cateCaution,cateOne.x,cateone.y)
+  image(cateCaution,cateOne.x,cateOne.y)
   }
 }
