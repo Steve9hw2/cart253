@@ -6,7 +6,18 @@ This is my take on the first project for CART 253.
 **************************************************/
 // variable declaration.
 let gameState = undefined // possible assignments: intro, phaseOne, phaseTwo, phaseThree, end, failOne, failTwo, failThree
+let musicPlaying = false
+let jumpBool = false
+let descending = false
 
+// object declaration.
+let cateOne = {
+  x:100,
+  y:900,
+  size:100,
+  speed:5,
+  jumpPower:10,
+}
 
 // image declaration.
 let cateCaution
@@ -65,6 +76,10 @@ function draw() {
     background(120,139,245);
     layoutOne();
     musicOne();
+    if (keyIsPressed) {
+      playerInput();
+    }
+    cateOneDraw();
     }
     else if (gameState === `failOne`) {
 
@@ -88,7 +103,7 @@ function draw() {
 
 function introLayout() {
   background(0);
-  fill(119,196,75);
+  fill(119,196,75); // green
   rect(0,750,2400,700);
   image(cateStare, 300,450);
   image(borgar, 1600,250);
@@ -100,7 +115,7 @@ function introText() {
   fill(255);
   text(`Cate Want`,1250,400);
   textSize(180);
-  fill(240,174,53);
+  fill(240,174,53); // yellowish
   text(`Borgar`,1350,550);
   textSize(30);
   fill(255);
@@ -110,17 +125,58 @@ function introText() {
 }
 
 function keyPressed() {
+  print (keyCode);
   if (keyCode === 13 && gameState === `intro`) {
     gameState = `phaseOne`
+  } // Enter to start
+}
+
+function playerInput() {
+  if (keyCode === 32 && gameState === `phaseOne`) { // Space to jump (1)
+    jumpOne();
+  }
+  else if (keyCode === 65 && gameState === `phaseOne`) { // A for left (1)
+    leftOne();
+  }
+  else if (keyCode === 68 && gameState === `phaseOne`) { // D for left (1)
+    rightOne();
   }
 }
 
 function layoutOne() {
-
+  fill(51,48,47); // asphalt gray
+  rect(0,1000,2400,200);
 }
 
 function musicOne() {
-  for(let i = 0; i < 1; i ++) {
+  if (musicPlaying === false) {
+  musicPlaying = true
   middayGardens.play();
+  }
+}
+
+function jumpOne() {
+  cateOne.y -= cateOne.jumpPower
+}
+
+function leftOne() {
+  cateOne.x -= cateOne.speed
+  cateOne.x = constrain(cateOne.x,100,2300);
+}
+
+function rightOne() {
+  cateOne.x += cateOne.speed
+  cateOne.x = constrain(cateOne.x,100,2300);
+}
+
+function cateOneDraw() {
+  if (jumpBool === false) {
+  image(cateSit,cateOne.x,cateOne.y)
+  }
+  else if (jumpBool === true && descending === false) {
+  image(cateJump,cateOne.x,cateOne.y)
+  }
+  else if (jumpBool === true && descending === true) {
+  image(cateCaution,cateOne.x,cateone.y)
   }
 }
