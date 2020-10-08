@@ -110,9 +110,10 @@ function preload() {
   cateCaution = loadImage(`assets/images/cateCautious.png`)
   cateJump = loadImage(`assets/images/cateJump.png`)
   cateLie = loadImage(`assets/images/cateLie.png`)
-  catePls = loadImage(`assets/images/CatePrePounce.png`)
+  catePls = loadImage(`assets/images/CatePls.png`)
   cateSit = loadImage(`assets/images/cateSitPaw.png`)
   cateStare = loadImage(`assets/images/cateStare.png`)
+  catePounce = loadImage(`assets/images/CatePrePounce.png`)
   borgar = loadImage(`assets/images/borgar.png`)
   mcdonal = loadImage(`assets/images/mcdonal.png`)
   tileFloor = loadImage(`assets/images/tileFloor.png`)
@@ -160,7 +161,7 @@ function draw() {
     print(jumpBool);
     }
     else if (gameState === `failOne`) {
-
+    lostCat();
     }
     else if (gameState === `phaseTwo`) {
     background(224,132,27);
@@ -532,5 +533,18 @@ function noJumping() {
 }
 
 function cateIsLost() {
-  
+  if (gameState === `phaseOne` && cateOne.x > 1900) {
+    gameState = `failOne`
+    middayGardens.stop();
+  }
+}
+
+function lostCat() {
+  background(0);
+  image(catePls,1300,400);
+  fill(255);
+  textSize(100);
+  text(`how did you even manage to get lost?`,1000,200);
+  textSize(40);
+  text(`now this poor overweight feline will never borgar.`,1000,900);
 }
