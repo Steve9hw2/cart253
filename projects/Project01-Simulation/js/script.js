@@ -10,6 +10,7 @@ let musicPlaying = false
 let jumpBool = false
 let descending = false
 let jumpStatus = 0 // number which will change to match cateOne.jumpPower, used to track the status and determine descending.
+let enterPrompt = false
 
 // object declaration.
 let cateOne = {
@@ -86,7 +87,11 @@ let catePounce
 let cateSit
 let cateStare
 let borgar
-
+let mcdonal
+let tileFloor
+let tileWall
+let cheems
+let cheems2
 // sound delcaration.
 let marioJump
 let meow
@@ -106,6 +111,11 @@ function preload() {
   cateSit = loadImage(`assets/images/cateSitPaw.png`)
   cateStare = loadImage(`assets/images/cateStare.png`)
   borgar = loadImage(`assets/images/borgar.png`)
+  mcdonal = loadImage(`assets/images/mcdonal.png`)
+  tileFloor = loadImage(`assets/images/tileFloor.png`)
+  tileWall = loadImage(`assets/images/tileWall.png`)
+  cheems = loadImage(`assets/images/cheems.png`)
+  cheems2 = loadImage(`assets/images/cheemsTwo.png`)
   // sounds
   marioJump = loadSound(`assets/sounds/marioJump.mp3`)
   meow = loadSound(`assets/sounds/meow.mp3`)
@@ -136,6 +146,7 @@ function draw() {
     layoutOne();
     musicOne();
     jumpOne();
+    textPrompt();
     if (keyIsPressed) {
       playerInput();
     }
@@ -146,7 +157,13 @@ function draw() {
 
     }
     else if (gameState === `phaseTwo`) {
-
+    background(224,132,27);
+    layoutTwo();
+    musicTwo();
+    if (keyIsPressed) {
+      playerInput();
+    }
+    cateOneDraw();
     }
     else if (gameState === `failTwo`) {
 
@@ -193,27 +210,47 @@ function keyPressed() {
   if (keyCode === 32 && gameState === `phaseOne`) { // Space to jump (1)
     jumpedOne();
   }
+  if (keyCode === 13 && gameState == `phaseOne` && enterPrompt == true) {
+    gameState = `phaseTwo`
+    middayGardens.stop();
+    musicPlaying = false
+    cateOne.x = 150;
+  }
 }
 
 function playerInput() {
  if (keyCode === 65 && gameState === `phaseOne`) { // A for left (1)
     leftOne();
   }
-  else if (keyCode === 68 && gameState === `phaseOne`) { // D for left (1)
+  else if (keyCode === 68 && gameState === `phaseOne`) { // D for right (1)
     rightOne();
+  }
+  else if (keyCode === 65 && gameState === `phaseTwo`) { // A for left (2)
+    leftTwo();
+  }
+  else if (keyCode === 68 && gameState === `phaseTwo`) { // D for right (2)
+    rightTwo();
   }
 }
 
 function layoutOne() {
   fill(51,48,47); // asphalt gray
-  rect(0,1000,2400,200);
+  rect(0,925,2400,275);
   clouds();
+  image(mcdonal,1100,-25);
 }
 
 function musicOne() {
   if (musicPlaying === false) {
   musicPlaying = true
   middayGardens.play();
+  }
+}
+
+function musicTwo() {
+  if (musicPlaying === false) {
+    musicPlaying = true
+    eveningLake.play();
   }
 }
 
@@ -253,16 +290,26 @@ function jumpOne() {
 
 function leftOne() {
   cateOne.x -= cateOne.speed
-  cateOne.x = constrain(cateOne.x,100,2300);
+  cateOne.x = constrain(cateOne.x,100,2100);
   // descending = false;
-  // jumpBool = false;
+  // jumpBool = false
 }
 
 function rightOne() {
   cateOne.x += cateOne.speed
-  cateOne.x = constrain(cateOne.x,100,2300);
+  cateOne.x = constrain(cateOne.x,100,2100);
   // descending = false;
   // jumpBool = false;
+}
+
+function leftTwo() {
+  cateOne.x -= cateOne.speed
+  cateOne.x = constrain(cateOne.x,100,2100);
+}
+
+function rightTwo() {
+  cateOne.x += cateOne.speed
+  cateOne.x = constrain(cateOne.x,100,2100);
 }
 
 function cateOneDraw() {
@@ -400,4 +447,22 @@ function cloudFillRandomize() {
   cloudFour.fill = random(120,200);
   cloudFive.fill = random(120,200);
   cloudSix.fill = random(120,200);
+}
+
+function textPrompt() {
+  if (cateOne.x > 1200 && cateOne.x < 1600) {
+    fill(0);
+    rect(600,550,500,70,100)
+    fill(255);
+    textSize(25);
+    text(`press enter to enter mcdonal.`,825,580);
+    enterPrompt = true;
+  }
+  else {
+    enterPrompt = false;
+  }
+}
+
+function layoutTwo() {
+    image(tileFloor,0,-100);
 }
