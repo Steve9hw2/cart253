@@ -21,6 +21,62 @@ let cateOne = {
   jumpTime:20,
 }
 
+// cloud declaration - used for random cloud generation.
+let cloudOne = {
+  x:0,
+  y:0,
+  vx:-1,
+  length:80,
+  height:40,
+  curvature:0,
+  fill:100,
+};
+let cloudTwo = {
+  x:0,
+  y:0,
+  vx:-1.5,
+  length:60,
+  height:20,
+  curvature:0,
+  fill:100,
+};
+let cloudThree = {
+  x:0,
+  y:0,
+  vx:-1.2,
+  length:50,
+  height:20,
+  curvature:0,
+  fill:100,
+};
+let cloudFour = {
+  x:0,
+  y:0,
+  vx:-1.4,
+  length:120,
+  height:50,
+  curvature:0,
+  fill:100,
+};
+let cloudFive = {
+  x:0,
+  y:0,
+  vx:-1.6,
+  length:100,
+  height:30,
+  curvature:0,
+  fill:100,
+}
+let cloudSix = {
+  x:0,
+  y:0,
+  vx:-1.6,
+  length:90,
+  height:50,
+  curvature:0,
+  fill:0,
+};
+
 // image declaration.
 let cateCaution
 let cateJump
@@ -64,6 +120,7 @@ function preload() {
 function setup() {
     createCanvas(2400,1200);
     gameState = `intro`;
+    randomizeClouds();
 }
 
 // draw()
@@ -150,6 +207,7 @@ function playerInput() {
 function layoutOne() {
   fill(51,48,47); // asphalt gray
   rect(0,1000,2400,200);
+  clouds();
 }
 
 function musicOne() {
@@ -217,4 +275,129 @@ function cateOneDraw() {
   else if (jumpBool === true && descending === true) {
   image(cateCaution,cateOne.x,cateOne.y)
   }
+}
+
+function clouds() {     // function which moves clouds and launches a check function. Could inheritence help here? Probably.
+  cloudOne.x += cloudOne.vx
+  cloudTwo.x += cloudTwo.vx
+  cloudThree.x += cloudThree.vx
+  cloudFour.x += cloudFour.vx
+  cloudFive.x += cloudFive.vx
+  cloudSix.x += cloudSix.vx
+  cloudOneCheck();
+  cloudTwoCheck();
+  cloudThreeCheck();
+  cloudFourCheck();
+  cloudFiveCheck();
+  cloudSixCheck();
+  noStroke();
+  fill(cloudOne.fill);
+  rect(cloudOne.x,cloudOne.y,cloudOne.length,cloudOne.height,cloudOne.curvature);
+  fill(cloudTwo.fill);
+  rect(cloudTwo.x,cloudTwo.y,cloudTwo.length,cloudTwo.height,cloudTwo.curvature);
+  fill(cloudThree.fill);
+  rect(cloudThree.x,cloudThree.y,cloudThree.length,cloudThree.height,cloudThree.curvature);
+  fill(cloudFour.fill);
+  rect(cloudFour.x,cloudFour.y,cloudFour.length,cloudFour.height,cloudFour.curvature);
+  fill(cloudFive.fill);
+  rect(cloudFive.x,cloudFive.y,cloudFive.length,cloudFive.height,cloudFive.curvature);
+  fill(cloudSix.fill);
+  rect(cloudSix.x,cloudSix.y,cloudSix.length,cloudSix.height,cloudSix.curvature);
+}
+
+function randomizeClouds() {
+  cloudOne.x = random(0,2400);
+  cloudOne.y = random(0,300);
+  cloudTwo.x = random(0,2400);
+  cloudTwo.y = random(0,300);
+  cloudThree.x = random(0,2400);
+  cloudThree.y = random(0,300);
+  cloudFour.x = random(0,2400);
+  cloudFour.y = random(0,300);
+  cloudFive.x = random(0,2400);
+  cloudFive.y = random(0,300);
+  cloudSix.x = random(0,2400);
+  cloudSix.y = random(0,300);
+  cloudOne.length = random(180,500);
+  cloudTwo.length = random(180,500);
+  cloudThree.length = random(180,500);
+  cloudFour.length = random(180,500);
+  cloudFive.length = random(180,500);
+  cloudSix.length = random(180,500);
+  cloudOne.height = random(90,180);
+  cloudTwo.height = random(90,180);
+  cloudThree.height = random(90,180);
+  cloudFour.height = random(90,180);
+  cloudFive.height = random(90,180);
+  cloudSix.height = random(90,180);
+  cloudOne.curvature = cloudOne.length/3
+  cloudTwo.curvature = cloudTwo.length/3
+  cloudThree.curvature = cloudThree.length/3
+  cloudFour.curvature = cloudFour.length/3
+  cloudFive.curvature = cloudFive.length/3
+  cloudSix.curvature = cloudSix.length/3
+  cloudFillRandomize();
+}
+
+function cloudOneCheck() {
+  if (cloudOne.x < -500) {
+    cloudOne.x = 2500
+    cloudOne.y = random(0,300);
+    cloudOne.length = random(180,500);
+    cloudOne.height = random(90,180);
+  }
+}
+
+function cloudTwoCheck() {
+  if (cloudTwo.x < -500) {
+    cloudTwo.x = 2500
+    cloudTwo.y = random(0,300);
+    cloudTwo.length = random(180,500);
+    cloudTwo.height = random(90,180);
+  }
+}
+
+function cloudThreeCheck() {
+  if (cloudThree.x < -500) {
+    cloudThree.x = 2500
+    cloudThree.y = random(0,300);
+    cloudThree.length = random(180,500);
+    cloudThree.height = random(90,180);
+  }
+}
+
+function cloudFourCheck() {
+  if (cloudFour.x < -500) {
+    cloudFour.x = 2500
+    cloudFour.y = random(0,300);
+    cloudFour.length = random(180,500);
+    cloudFour.height = random(90,180);
+  }
+}
+
+function cloudFiveCheck() {
+  if (cloudFive.x < -500) {
+    cloudFive.x = 2500
+    cloudFive.y = random(0,300);
+    cloudFive.length = random(180,500);
+    cloudFive.height = random(90,180);
+  }
+}
+
+function cloudSixCheck() {
+  if (cloudSix.x < -500) {
+    cloudSix.x = 2500
+    cloudSix.y = random(0,300);
+    cloudSix.length = random(180,500);
+    cloudSix.height = random(90,180);
+  }
+}
+
+function cloudFillRandomize() {
+  cloudOne.fill = random(120,200);
+  cloudTwo.fill = random(120,200);
+  cloudThree.fill = random(120,200);
+  cloudFour.fill = random(120,200);
+  cloudFive.fill = random(120,200);
+  cloudSix.fill = random(120,200);
 }
