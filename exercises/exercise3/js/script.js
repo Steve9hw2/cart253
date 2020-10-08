@@ -5,6 +5,8 @@ Steve Berthiaume
 Two circles are looking for love. Shall they find it?
 Probably not. Well, this is the exercise, so maybe?
 **************************************************/
+let c = undefined // random chance for the secret
+let pinkTimer = 0
 
 let circleBlue = {
   x:100,
@@ -34,13 +36,26 @@ let circlePink = {
   }
 }
 
-let activityState = undefined // intro, play, end, fail
+let circleSecret = {
+  x:250,
+  y:80,
+  size:80,
+  speed:3,
+  fill: {
+    r:240,
+    g:154,
+    b:55,
+  }
+}
+
+let activityState = undefined // intro, play, end, fail, secret
 
 // setup()
 function setup() {
   createCanvas(500,500);
   activityState = `intro`
   randomizeCircleMotion();
+  randomizeSecret();
 }
 
 // draw()
@@ -51,15 +66,20 @@ function draw() {
     }
   else if (activityState === `play`) {
     circlesMove();
+    secretChance();
     circlesDrawn();
     circlesFailCheck();
     circlesTouchCheck();
+    secretTouchCheck();
   }
   else if (activityState === `end`) {
     circleLove();
   }
   else if (activityState === `fail`) {
     circlesFail();
+  }
+  else if (activityState === `secret`) {
+    secretEnd();
   }
 }
 
@@ -89,10 +109,15 @@ function randomizeCircleMotion() {
 
 function circlesMove() {
   background(0);
-  circleBlue.x += circleBlue.vx;
-  circleBlue.y += circleBlue.vy;
-  circlePink.x += circlePink.vx;
-  circlePink.y += circlePink.vy;
+  pinkTimer ++
+  circleBlue.x = mouseX;
+  circleBlue.x = constrain(circleBlue.x,0,500);
+  circleSecret.y += circleSecret.speed;
+  if (pinkTimer > 50)   {
+  pinkTimer = 0
+  circlePink.x = random(50,450);
+  circlePink.y = random(225,275);
+  }
 }
 
 function circlesDrawn() {
@@ -105,7 +130,7 @@ function circlesDrawn() {
 
 function circlesTouchCheck() {
   let dx = circleBlue.x - circlePink.x
-  let dy = circleBlue.y - circlePink.y
+  // let dy = circleBlue.y - circlePink.y
   let circleSize = (circleBlue.size + circlePink.size) / 2
   if (dx < circleSize / 2 && dx > 0 || dx > -circleSize/2 && dx < 0) {
     activityState = `end`
@@ -113,7 +138,7 @@ function circlesTouchCheck() {
 }
 
 function circlesFailCheck() {
-  if (circleBlue.x > width || circleBlue.x < 0 || circleBlue.y < 0 || circleBlue.y > height || circlePink.x > width || circlePink.x < 0 || circlePink.y > height || circlePink.y < 0) {
+  if (circlePink.x > width || circlePink.x < 0 || circlePink.y > height || circlePink.y < 0) {
     activityState = `fail`
 }
 }
@@ -132,4 +157,37 @@ function circleLove() {
   ellipse(200,300,circleBlue.size)
   textSize(50);
   text(`Look, it's a love!`,250,200);
+}
+
+function secretChance() {
+    if (c < 2) {
+      fill(circleSecret.fill.r,circleSecret.fill.g,circleSecret.fill.b);
+      ellipse(circleSecret.x,circleSecret.y,circleSecret.size);
+    }
+}
+
+function randomizeSecret() {
+  c = random(1,10)
+  print(c);
+}
+
+function secretTouchCheck() {
+  let dx = circleBlue.x - circleSecret.x
+  // let dy = circleBlue.y - circlePink.y
+  let circleSize = (circleBlue.size + circleSecret.size) / 2
+  if (dx < circleSize / 2 && dx > 0 && c < 2 || dx > -circleSize/2 && dx < 0 && c < 2) {
+    activityState = `secret`
+  }
+}
+
+function secretEnd() {
+  background(255);
+  fill(circleBlue.fill.r,circleBlue.fill.g,circleBlue.fill.b);
+  ellipse(200,300,circleBlue.size)
+  fill(circleSecret.fill.r,circleSecret.fill.g,circleSecret.fill.b);
+  ellipse(300,300,circleSecret.size);
+  textSize(35);
+  text(`Ok then. Sure.`,250,200);
+  textSize(22);
+  text(`(Where did that one come from?)`,250,230);
 }
