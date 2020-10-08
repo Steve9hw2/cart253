@@ -110,7 +110,7 @@ function preload() {
   cateCaution = loadImage(`assets/images/cateCautious.png`)
   cateJump = loadImage(`assets/images/cateJump.png`)
   cateLie = loadImage(`assets/images/cateLie.png`)
-  catePls = loadImage(`assets/images/CatePls.png`)
+  catePls = loadImage(`assets/images/catePls.png`)
   cateSit = loadImage(`assets/images/cateSitPaw.png`)
   cateStare = loadImage(`assets/images/cateStare.png`)
   catePounce = loadImage(`assets/images/CatePrePounce.png`)
@@ -539,7 +539,7 @@ function cateIsLost() {
   }
 }
 
-function lostCat() {
+function lostCat() { // fail state one
   background(0);
   image(catePls,1300,400);
   fill(255);
