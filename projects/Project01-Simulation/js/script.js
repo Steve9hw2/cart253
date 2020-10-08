@@ -5,12 +5,13 @@ Steve Berthiaume
 This is my take on the first project for CART 253.
 **************************************************/
 // variable declaration.
-let gameState = undefined // possible assignments: intro, phaseOne, phaseTwo, phaseThree, end, failOne, failTwo, failThree
+let gameState = undefined // possible assignments: intro, phaseOne, phaseTwo, end, failOne, failTwo
 let musicPlaying = false
 let jumpBool = false
 let descending = false
 let jumpStatus = 0 // number which will change to match cateOne.jumpPower, used to track the status and determine descending.
 let enterPrompt = false
+let cheemsTalked = false
 
 // object declaration.
 let cateOne = {
@@ -92,6 +93,8 @@ let tileFloor
 let tileWall
 let cheems
 let cheems2
+let donaldsLogo
+let redX
 // sound delcaration.
 let marioJump
 let meow
@@ -116,6 +119,8 @@ function preload() {
   tileWall = loadImage(`assets/images/tileWall.png`)
   cheems = loadImage(`assets/images/cheems.png`)
   cheems2 = loadImage(`assets/images/cheemsTwo.png`)
+  donaldsLogo = loadImage(`assets/images/donaldslogo.png`)
+  redX = loadImage(`assets/images/BAD.png`)
   // sounds
   marioJump = loadSound(`assets/sounds/marioJump.mp3`)
   meow = loadSound(`assets/sounds/meow.mp3`)
@@ -147,6 +152,7 @@ function draw() {
     musicOne();
     jumpOne();
     textPrompt();
+    cateIsLost();
     if (keyIsPressed) {
       playerInput();
     }
@@ -160,22 +166,18 @@ function draw() {
     background(224,132,27);
     layoutTwo();
     musicTwo();
+    textPromptTwo();
     if (keyIsPressed) {
       playerInput();
     }
+    grabBorgar();
     cateOneDraw();
     }
     else if (gameState === `failTwo`) {
-
-    }
-    else if (gameState === `phaseThree`) {
-
-    }
-    else if (gameState === `failThree`) {
-
+    noJumping();
     }
     else if (gameState === `end`) {
-
+    endScreen();
     }
 }
 
@@ -216,6 +218,13 @@ function keyPressed() {
     musicPlaying = false
     cateOne.x = 150;
   }
+  if (keyCode === 13 && gameState == `phaseTwo` && enterPrompt == true && cateOne.x > 1200) {
+    cheemsTalked = true;
+  }
+  if (keyCode === 32 && gameState == `phaseTwo`) { // bad end
+    gameState = `failTwo`
+    eveningLake.stop();
+  }
 }
 
 function playerInput() {
@@ -228,7 +237,7 @@ function playerInput() {
   else if (keyCode === 65 && gameState === `phaseTwo`) { // A for left (2)
     leftTwo();
   }
-  else if (keyCode === 68 && gameState === `phaseTwo`) { // D for right (2)
+  else if (keyCode === 68 && gameState === `phaseTwo` ) { // D for right (2)
     rightTwo();
   }
 }
@@ -304,12 +313,12 @@ function rightOne() {
 
 function leftTwo() {
   cateOne.x -= cateOne.speed
-  cateOne.x = constrain(cateOne.x,100,2100);
+  cateOne.x = constrain(cateOne.x,100,1700);
 }
 
 function rightTwo() {
   cateOne.x += cateOne.speed
-  cateOne.x = constrain(cateOne.x,100,2100);
+  cateOne.x = constrain(cateOne.x,100,1700);
 }
 
 function cateOneDraw() {
@@ -450,7 +459,7 @@ function cloudFillRandomize() {
 }
 
 function textPrompt() {
-  if (cateOne.x > 1200 && cateOne.x < 1600) {
+  if (cateOne.x > 1200 && cateOne.x < 1600 && gameState === `phaseOne`) {
     fill(0);
     rect(600,550,500,70,100)
     fill(255);
@@ -463,6 +472,65 @@ function textPrompt() {
   }
 }
 
+function textPromptTwo() {
+  if (cateOne.x > 1400 && gameState === `phaseTwo` && cheemsTalked === false) {
+  fill(0);
+  rect(600,550,500,70,100);
+  fill(255);
+  textSize(25);
+  text(`press enter to talk to Cheems.`,825,580);
+  enterPrompt = true;
+  }
+  else {
+    enterPrompt = false;
+  }
+}
+
 function layoutTwo() {
+   image(tileWall,0,0);
     image(tileFloor,0,-100);
+    image(donaldsLogo,1000,500);
+    if (cheemsTalked === false) {
+      image(cheems,1800,800)
+    }
+    else if (cheemsTalked === true) {
+      image(cheems2,1800,800)
+      fill(0);
+      rect(200,100,1800,120,100);
+      fill(255);
+      textSize(35);
+      text(`mmyou agaim? oh gommd. i'm so omver this. just tamke the burger and gemt out of here.`,950,160)
+      image(borgar,200,800)
+    }
+} // scenery for inside mcdonal.
+
+function grabBorgar() {
+  if (gameState === `phaseTwo` && cheemsTalked === true && cateOne.x < 600) {
+    gameState = `end`
+    eveningLake.stop()
+    midnightMountain.play()
+  }
+}
+
+function endScreen() {
+  background(0);
+  image(cateLie,100,750);
+  fill(255);
+  textSize(60);
+  text(`you got your mcdonal. good job.`,1700,200);
+}
+
+function noJumping() {
+  background(0);
+  image(cateJump,100,650);
+  image(redX,150,720);
+  fill(255);
+  textSize(220);
+  text(`BAD CAT!`,1600,500);
+  textSize(40);
+  text(`jumping in stores is rude, no burger for you!`,1700,900);
+}
+
+function cateIsLost() {
+  
 }
