@@ -6,64 +6,35 @@ Here is a description of this template p5 project.
 **************************************************/
 "use strict";
 
-let school = []; //fish
-let schoolSize = 4;
-// setup()
-//
-// Description of setup() goes here.
+let  circle = {
+  x:0,
+  y:0,
+  size:100,
+  trail: []
+};
+
+
 function setup() {
-  createCanvas(600, 600);
-  for (let i = 0; i < schoolSize; i++) {
-    let fish = createFish(random(0,width),random(0,height));
-    school.push(fish);
-  }
+  createCanvas(600,600);
+  fill(255);
 }
 
-function createFish(x,y) {
-  let fish = {
-    x:x,
-    y:y,
-    size:50,
-    vx:0,
-    vy:0,
-    speed:2,
-  };
-  return fish;
-}
-
-// draw()
-//
-// Description of draw() goes here.
 function draw() {
-  background(0);
-  for (let i = 0; i < school.length; i++) {
-    moveFish(school[i]);
-    displayFish(school[i]);
-  }
-  print(school.length);
-}
+    background(0);
 
-function moveFish(fish) {
-  let change = random(0,1);
-  if (change < 0.05) {
-    fish.vx = random(-fish.speed,fish.speed);
-    fish.vy = random(-fish.speed,fish.speed);
-  }
-  fish.x += fish.vx;
-  fish.y += fish.vy;
-  fish.x = constrain(fish.x,0,width);
-  fish.y = constrain(fish.y,0,height);
-}
+    circle.x = mouseX;
+    circle.y = mouseY;
 
-function displayFish(fish) {
-  push();
-  fill(200,100,100);
-  noStroke();
-  ellipse(fish.x,fish.y,fish.size);
-  pop();
-}
+    for (let i = 0; i < circle.trail.length; i++) {
+      let position = circle.trail[i];
+      ellipse(position.x,position.y,circle.size);
+    }
 
-function mousePressed() {
-  let fish = createFish(mouseX,mouseY);
-  school.push(fish);
+    ellipse(circle.x,circle.y,circle.size);
+
+    let newTrailPosition = {
+      x:circle.x,
+      y:circle.y,
+    };
+    circle.trail.push(newTrailPosition);
 }
