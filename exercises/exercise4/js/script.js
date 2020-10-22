@@ -165,6 +165,7 @@ function displayEaten() {
   fill(255);
   text(`Eaten:`,50,590);
   text(eatenFish,120,590);
+  pop();
 } // eaten tracker
 
 function timer() {
