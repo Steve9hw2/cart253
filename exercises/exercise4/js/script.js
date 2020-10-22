@@ -2,7 +2,7 @@
 Exercise 4
 Steve Berthiaume
 
-Age of Aquariums
+Age of Aquariums - Eat the Circles
 **************************************************/
 "use strict";
 
@@ -11,6 +11,7 @@ let school = [];
 let schoolSize = 20;
 let eatenFish = 0;
 let fishyfishy;
+let deadfishy;
 
 let userFish = {
   x:0,
@@ -20,6 +21,7 @@ let userFish = {
 
 function preload() {
   fishyfishy = loadImage(`assets/images/fishyfishy.png`)
+  deadfishy = loadImage(`assets/images/deadfishy.png`)
 }
 
 // setup()
@@ -78,7 +80,7 @@ function draw() {
   winScreen();
   }
   else if (state === `fail`) {
-
+  failScreen();
   }
 }
 
@@ -211,6 +213,15 @@ function introTextAnim() {
 function winScreen() {
   background(8, 44, 102);
   fill(255);
+  textSize(60);
   text(`A winner is you`,width/2,height/2);
   image(fishyfishy,450,450);
+}
+
+function failScreen() {
+  background (3, 38, 28);
+  fill(255);
+  textSize(24);
+  text(`Fish need circles to survive, you know.`,width/2,height/2);
+  image(deadfishy,450,450);
 }
