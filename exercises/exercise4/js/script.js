@@ -59,17 +59,27 @@ function createFish(x,y) {
 // draw()
 function draw() {
   background(0);
-
+  if (state === `start`) {
+    introTextAnim();
+  }
+  else if (state === `fish`) {
   for (let i = 0; i < school.length; i++) {
     moveFish(school[i]);
     escapeFish(school[i]);
     eatFish(school[i]);
     displayFish(school[i]);
+    displayEaten();
   } // other fish
   userFishAct();
   timer();
-  print(school.length)
-  print(eatenFish)
+  failCheck();
+  }
+  else if (state === `end`) {
+  winScreen();
+  }
+  else if (state === `fail`) {
+
+  }
 }
 
 function moveFish(fish) {
@@ -148,14 +158,59 @@ function userFishAct() {
   image(fishyfishy,userFish.x,userFish.y);
 }
 
+function displayEaten() {
+  push();
+  fill(255);
+  text(`Eaten:`,50,590);
+  text(eatenFish,120,590);
+}
+
 function timer() {
   push();
   fill(255);
-  text(parseInt(30 - (frameCount/30)),580,590);
+  text(parseInt(30 + 5 - (frameCount/30)),580,590);
   pop();
 }
 
+function failCheck() {
+  let t = parseInt(frameCount/30);
+  if (t > 35 && eatenFish !== schoolSize) {
+    state = `fail`
+  }
+  if (eatenFish === schoolSize) {
+    state = `end`
+  }
+}
+
+function introTextAnim() {
+  let t = parseInt(frameCount/30);
+  push();
+  textSize(60);
+  fill(255);
+  if (t > 1) {
+    text(`Eat`,width/2,200);
+  }
+  if (t > 2) {
+    text(`the`,width/2,280);
+  }
+  if (t > 3) {
+  fill(8, 44, 102)
+  textSize(120);
+  text(`Circles`,width/2,400);
+  }
+  if (t === 5) {
+    state = `fish`
+  }
+  pop();
+}
 // function mousePressed() {
 //   let fish = createFish(mouseX,mouseY);
 //   school.push(fish);
 // }
+
+function winScreen() {
+  background(8, 44, 102);
+  fill(255);
+  text(`A winner is you`,width/2,height/2);
+  image(fishyfishy,450,450);
+}
