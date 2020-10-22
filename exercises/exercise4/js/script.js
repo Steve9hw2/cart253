@@ -8,8 +8,8 @@ Age of Aquariums - Eat the Circles
 
 let state = `start` // start, fish, end, fail
 let school = [];
-let schoolSize = 20;
-let eatenFish = 0;
+let schoolSize = 20; // 20 total fish
+let eatenFish = 0; // number of eaten fish
 let fishyfishy;
 let deadfishy;
 
@@ -19,13 +19,13 @@ let userFish = {
   size:128,
 }
 
-function preload() {
+function preload() {  // fish assets
   fishyfishy = loadImage(`assets/images/fishyfishy.png`)
   deadfishy = loadImage(`assets/images/deadfishy.png`)
 }
 
 // setup()
-function setup() {
+function setup() { // frame rate, base fish creation
   createCanvas(600, 600);
   frameRate(30);
   textSize(30);
@@ -61,7 +61,7 @@ function createFish(x,y) {
 // draw()
 function draw() {
   background(0);
-  if (state === `start`) {
+  if (state === `start`) { // intro, timed to automatically switch
     introTextAnim();
   }
   else if (state === `fish`) {
@@ -106,7 +106,7 @@ function displayFish(fish) {
   ellipse(fish.x,fish.y,fish.size);
   pop();
   }
-  if (fish.eaten === true) {
+  if (fish.eaten === true) {  // bools used to add exactly 1 to eatenfish before disposing of the index
     if (fish.counted === false) {
       fish.counted = true
       eatenFish++;
@@ -139,7 +139,7 @@ function escapeFish(fish) {
     }
   }
   pop();
-}
+} // fish avoid the player
 
 function eatFish(fish) {
   let x1 = fish.x
@@ -150,7 +150,7 @@ function eatFish(fish) {
   if (d < 50) {
     fish.eaten = true
   }
-}
+} // player is very close to fish (eats)
 
 function userFishAct() {
   userFish.x = mouseX - 64
@@ -158,21 +158,21 @@ function userFishAct() {
   userFish.x = constrain(userFish.x,0,width);
   userFish.y = constrain(userFish.y,0,height);
   image(fishyfishy,userFish.x,userFish.y);
-}
+} // movement of player
 
 function displayEaten() {
   push();
   fill(255);
   text(`Eaten:`,50,590);
   text(eatenFish,120,590);
-}
+} // eaten tracker
 
 function timer() {
   push();
   fill(255);
   text(parseInt(30 + 5 - (frameCount/30)),580,590);
   pop();
-}
+} // visible timer for fish state
 
 function failCheck() {
   let t = parseInt(frameCount/30);
@@ -182,7 +182,7 @@ function failCheck() {
   if (eatenFish === schoolSize) {
     state = `end`
   }
-}
+} // check for win and fail states
 
 function introTextAnim() {
   let t = parseInt(frameCount/30);
@@ -204,11 +204,7 @@ function introTextAnim() {
     state = `fish`
   }
   pop();
-}
-// function mousePressed() {
-//   let fish = createFish(mouseX,mouseY);
-//   school.push(fish);
-// }
+} // automated text animation & state transition
 
 function winScreen() {
   background(8, 44, 102);
