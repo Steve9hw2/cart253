@@ -12,6 +12,7 @@ let goal;
 let balls = [];
 let numBalls = 12;
 let counter;
+let activeBalls;
 
 // setup()
 function setup() {
@@ -20,6 +21,7 @@ function setup() {
   paddle = new Paddle(400,20);
   goal = new Goal(20,240);
   counter = new Counter(40,100);
+  activeBalls = new ActiveBalls(40,140);
 
   for(let i = 0; i < numBalls; i++) {
     let x = random(0,width);
@@ -32,6 +34,7 @@ function setup() {
 // draw()
 function draw() {
   background(0);
+  activeBalls.value = 0;
 
   paddle.display();
   goal.anim();
@@ -46,13 +49,16 @@ function draw() {
       ball.bounce(paddle);
       ball.point(goal);
       ball.display();
+      activeBalls.value ++
   }
     if (!ball.active && ball.score) {
-
+      ball.vanish();
+      ball.score = false;
+      counter.score ++;
     }
   }
 
-
+  activeBalls.display();
 }
 
 function keyPressed() {
