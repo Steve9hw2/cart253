@@ -10,6 +10,7 @@ class Ball {
     this.maxSpeed = 10;
     this.size = 40;
     this.active = true;
+    this.score = false;
   }
 
   gravity(f) {
@@ -43,6 +44,25 @@ class Ball {
       this.vy = -this.vy;
       this.ay = 0;
     }
+  }
+
+  point(goal) {
+    if (this.x > goal.x - goal.width/2 &&
+        this.x < goal.x + goal.width/2 &&
+        this.y + this.size/2 > goal.y - goal.height/2 &&
+        this.y - this.size/2 < goal.y + goal.height/2 &&
+        this.active === true) {
+          this.active = false;
+          this.score = true;
+        }
+  }
+
+  vanish() {
+    push();
+    fill(200,200,40);
+    noStroke();
+    ellipse(this.x,this.y,this.size);
+    pop();
   }
 
   display() {

@@ -8,14 +8,18 @@ OOP Activity. I dunno, it's not given a name.
 
 let gravity = 0.0025;
 let paddle;
+let goal;
 let balls = [];
 let numBalls = 12;
+let counter;
 
 // setup()
 function setup() {
-  createCanvas(windowWidth,windowHeight);
+  createCanvas(1200,1000);
 
-  paddle = new Paddle(300,20);
+  paddle = new Paddle(400,20);
+  goal = new Goal(20,240);
+  counter = new Counter(40,100);
 
   for(let i = 0; i < numBalls; i++) {
     let x = random(0,width);
@@ -29,8 +33,10 @@ function setup() {
 function draw() {
   background(0);
 
-  paddle.move();
   paddle.display();
+  goal.anim();
+  goal.display();
+  counter.display();
 
   for(let i = 0; i < balls.length; i++) {
     let ball = balls[i];
@@ -38,7 +44,33 @@ function draw() {
       ball.gravity(gravity);
       ball.move();
       ball.bounce(paddle);
+      ball.point(goal);
       ball.display();
   }
+    if (!ball.active && ball.score) {
+
+    }
   }
+
+
+}
+
+function keyPressed() {
+  let buffer = false;
+    if (keyCode === 65 && paddle.x === 600 && buffer === false) {
+       buffer = true;
+       paddle.x = 200;
+    }
+    if (keyCode === 68 && paddle.x === 200 && buffer === false) {
+       buffer = true;
+       paddle.x = 600;
+    }
+    if (keyCode === 65 && paddle.x === 1000 && buffer === false) {
+      buffer = true;
+      paddle.x = 600;
+    }
+    if (keyCode === 68 && paddle.x === 600 && buffer === false) {
+      buffer = true;
+      paddle.x = 1000;
+    }
 }
