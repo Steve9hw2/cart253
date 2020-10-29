@@ -30,6 +30,6 @@ function draw() {
   background(garden.grassColor.r,garden.grassColor.g,garden.grassColor.b);
   for (let i = 0; i < garden.flowers.length; i++) {
     let flower = garden.flowers[i];
-    flower.display();
+    flower.display()
   }
 }
