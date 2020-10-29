@@ -14,54 +14,65 @@ let balls = [];
 let numBalls = 12;
 let counter;
 let activeBalls;
+let luck = undefined; // random chance of the program being way too easy; access to impossible ending
 
 // setup()
 function setup() {
   createCanvas(1200,1000);
-
-  paddle = new Paddle(400,20);
-  goal = new Goal(20,240);
-  counter = new Counter(40,100);
-  activeBalls = new ActiveBalls(40,140);
-
+  luck = random(0,1);
+  print(luck);
+  paddle = new Paddle(400,20);              // controlled by the player
+  goal = new Goal(50,240);                 // adds to score when a ball collides
+  counter = new Counter(40,100);          // tracks score
+  activeBalls = new ActiveBalls(40,140); // tracks remaining balls
+  if (luck > 0.1) {                     // roughly 10% of all balls appearing above the goal, causing a perfect score
   for(let i = 0; i < numBalls; i++) {
     let x = random(0,width);
     let y = random(-1200,-100);
     let ball = new Ball(x,y);
     balls.push(ball);
   }
+  }
+  else {
+    for(let i = 0; i < numBalls; i++) {
+      let x = 1050;   // this spot just happens to be perfectly aligned with the goal!
+      let y = random(-1200,-100);
+      let ball = new Ball(x,y);
+      balls.push(ball);
+    }
+    }
 }
 
 // draw()
 function draw() {
   background(0);
   if (state === `game`) {
-  activeBalls.value = 0;
+  activeBalls.value = 0;   // reset tracked balls. inactive ones won't add to this, meaning the game is over if it remains at zero. (see end();)
   paddle.display();
-  goal.anim();
+  goal.anim();   // moves the goal up and down.
   goal.display();
   counter.display();
-  ballAction();
+  ballAction(); // all ball specific methods are stored in this function.
   activeBalls.display();
   end();
   }
   else if (state === `none`) {
-
+    endNone();
   }
   else if (state === `bad`) {
-
+    endBad();
   }
   else if (state === `decent`) {
-
+    endDecent();
   }
   else if (state === `good`) {
-
+    endGood();
   }
   else if (state === `amazing`) {
-
+    endAmazing();
   }
   else if (state === `impossible`) {
-
+    endImpossible();
   }
 }
 
@@ -125,4 +136,110 @@ function end() {
       state = `impossible`;
     }
   }
-}
+} // When at the end of a frame, there are still 0 active balls, end and switch states.
+
+function endNone() {
+  push();
+  textAlign(CENTER,CENTER);
+  fill(255);
+  textSize(30);
+  text(`YOUR SCORE:  ` + counter.score, 600,100);
+  textSize(40);
+  text(`YOUR RANK:`,600,200);
+  textSize(100);
+  fill(74,5,0);
+  text(`Failure`,600,500);
+  textSize(40);
+  fill(255);
+  text(`...yikes`,600,900);
+  pop();
+} // Ending 1: 0 Balls.
+
+function endBad() {
+  push();
+  textAlign(CENTER,CENTER);
+  fill(255);
+  textSize(30);
+  text(`YOUR SCORE:  ` + counter.score, 600,100);
+  textSize(40);
+  text(`YOUR RANK:`,600,200);
+  textSize(100);
+  fill(219,31,18);
+  text(`Bad`,600,500);
+  textSize(40);
+  fill(255);
+  text(`...better luck next time?`,600,900);
+  pop();
+} // Ending 2: 1 Ball.
+
+function endDecent() {
+  push();
+  textAlign(CENTER,CENTER);
+  fill(255);
+  textSize(30);
+  text(`YOUR SCORE:  ` + counter.score, 600,100);
+  textSize(40);
+  text(`YOUR RANK:`,600,200);
+  textSize(100);
+  fill(219,155,18);
+  text(`Decent`,600,500);
+  textSize(40);
+  fill(255);
+  text(`an improvement, maybe!`,600,900);
+  pop();
+} // Ending 3: 2 Balls.
+
+function endGood() {
+  push();
+  textAlign(CENTER,CENTER);
+  fill(255);
+  textSize(30);
+  text(`YOUR SCORE:  ` + counter.score, 600,100);
+  textSize(40);
+  text(`YOUR RANK:`,600,200);
+  textSize(100);
+  fill(115,219,18);
+  text(`Good`,600,500);
+  textSize(40);
+  fill(255);
+  text(`quite impressive!`,600,900);
+  pop();
+} // Ending 4: 3 Balls.
+
+function endAmazing() {
+  push();
+  textAlign(CENTER,CENTER);
+  fill(255);
+  textSize(30);
+  text(`YOUR SCORE:  ` + counter.score, 600,100);
+  textSize(40);
+  text(`YOUR RANK:`,600,200);
+  textSize(100);
+  fill(18,219,172);
+  text(`Amazing`,600,500);
+  textSize(40);
+  fill(255);
+  text(`shockingly fantastic!`,600,900);
+  pop();
+} // Ending 5: 4-9 Balls.
+
+function endImpossible() {
+  push();
+  textAlign(CENTER,CENTER);
+  fill(255);
+  textSize(30);
+  text(`YOUR SCORE:  ` + counter.score, 600,100);
+  textSize(40);
+  text(`YOUR RANK:`,600,200);
+  textSize(100);
+  fill(31,10,77);
+  text(`Impossible`,600,500);
+  textSize(40);
+  fill(255);
+  text(`how.`,600,900);
+  textSize(16);
+  text(`did you change the code?`,600,940);
+  text(`this was supposed to be impossible.`,600,960);
+  text(`did you scam me? are you a machine??`,600,980);
+  pop();
+} // Ending 6: 10-12 Balls. (If anyone manages this without the luck mechanic, they're a robot!)
