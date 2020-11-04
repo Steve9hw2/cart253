@@ -23,6 +23,7 @@ let lem5;
 let lem6;
 let lem7;
 let lemIcon;
+let lemIconSmall;
 let menuPlayButton;
 let menuPlayFade;
 
@@ -61,6 +62,7 @@ function preload() {
   lem6 = loadImage(`assets/images/ArcticLemming.png`);
   lem7 = loadImage(`assets/images/GoldLemming.png`);
   lemIcon = loadImage(`assets/images/LemmingIcon.png`);
+  lemIconSmall = loadImage(`assets/images/LemmingIconSmall.png`);
   menuPlayButton = loadImage(`assets/images/Button.png`);
   menuPlayFade = loadImage(`assets/images/ButtonFade.png`);
 }
@@ -349,10 +351,10 @@ function sceneNameDisplay(area, variant) {
 function remainingDisplay() {
   push();
   fill(224,166,49);
-  textSize(80);
+  textSize(50);
   textFont(p5hatty);
   textAlign(LEFT,CENTER);
-  text(`x `+ numberOfLemmings, 160, 1000);
-  image(lemIcon,60,1000);
+  text(`x `+ numberOfLemmings, 120, 1030);
+  image(lemIconSmall,60,1000);
   pop();
 }
