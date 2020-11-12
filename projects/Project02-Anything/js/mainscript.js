@@ -34,7 +34,6 @@ let menuPlayFade;
 let clouds = [];
 let cloud;
 let maxPossibleClouds = 100;
-let musicPlaying = false;
 
 let singe;
 
@@ -58,7 +57,10 @@ let fastSpeed = 5;
 let fastforward;
 let fastforwardfade;
 let fastforwardhover;
+let fastforwardfadehover;
 
+let mute = false;
+let musicPlaying = false;
 let bg1_1;
 let bg1_2;
 let bg1_2alt;
@@ -70,8 +72,15 @@ let sunhl;
 let sundisabled = false;
 
 let currentbgm;
+let storedbgm;
 let bgm1_1;
 let bgm1_2;
+
+let audio;
+let audiofade;
+let audiohover;
+let audiofadehover;
+
 let scream;
 let singed;
 
@@ -109,6 +118,11 @@ function preload() {
   fastforward = loadImage(`assets/images/FastForward.png`);
   fastforwardfade = loadImage(`assets/images/FastForwardFade.png`);
   fastforwardhover = loadImage(`assets/images/FastForwardHover.png`);
+  fastforwardfadehover = loadImage(`assets/images/FastForwardFadeHover.png`);
+  audio = loadImage(`assets/images/Audio.png`);
+  audiofade = loadImage(`assets/images/AudioFade.png`);
+  audiohover = loadImage(`assets/images/AudioHover.png`);
+  audiofadehover = loadImage(`assets/images/AudioFadeHover.png`);
   // dead lemmings
   singe = loadImage(`assets/images/CrispLemming.png`);
   // reusable section assets
@@ -221,6 +235,7 @@ function loadScene(area, variant) {
   sceneNameDisplay(area.section, variant);
   remainingDisplay();
   fastForwardDisplay();
+  audioDisplay();
 }
 
 function startMenu() {
@@ -409,7 +424,7 @@ function sceneNameDisplay(area, variant) {
     let leveltext;
     push();
     fill(224,166,49);
-    textSize(80);
+    textSize(60);
     textFont(p5hatty);
     textAlign(LEFT,CENTER);
     leveltext = levelIndex[area][variant];
@@ -589,9 +604,11 @@ function lemdisplay(lem,variation) {
 
 function playMusic(bgm) {
   if (!musicPlaying) {
+    if (!mute) {
     musicPlaying = true;
     currentbgm = bgm;
     currentbgm.play();
+    }
   }
 }
 
@@ -615,7 +632,21 @@ function mouseClicked() {
         gameSpeed = normalSpeed;
       }
     }
-  } // fast forward
+  } // fast forward toggle
+  if (state === `s1` || state === `s2` || state === `s3` || state === `s4` || state === `s5`) {
+    if (mouseX >= 585 && mouseX <= 710 && mouseY >= 650 && mouseY <= 1180) {
+      if (!mute) {
+        storedbgm = currentbgm;
+        stopMusic();
+        mute = true;
+      }
+      else if (mute) {
+        currentbgm = storedbgm;
+        playMusic();
+        mute = false;
+      }
+    }
+  }
   if (state === `s1` && sceneOne == 1 && mouseX >= 390 && mouseX <= 500 && mouseY >= 30 && mouseY <= 750) { // 1-1 totem
     totemfallen = true;
     pitDisabled = true;
@@ -650,7 +681,9 @@ function checkGrav() {
     lem.gravity();
     if (!lem.scream) {
     lem.scream = true;
+    if (!mute) {
     scream.play();
+    }
     }
     lemdisplay(lem,lem.variation);
     }
@@ -747,7 +780,9 @@ function checkSinge() {
       lem.moving = false;
       deadLemmings ++;
       image(singe,lem.x,lem.y);
-      singed.play()
+      if (!mute) {
+        singed.play()
+      }
     }
   }
 }
@@ -766,7 +801,25 @@ function fastForwardDisplay() {
   else if (gameSpeed === fastSpeed) {
     image(fastforwardfade,0,0);
   }
-  if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175) {
+  if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175 && gameSpeed === normalSpeed) {
     image(fastforwardhover,0,0);
+  }
+  else if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175 && gameSpeed === fastSpeed) {
+    image(fastforwardfadehover,0,0);
+  }
+}
+
+function audioDisplay() {
+  if (mute) {
+    image(audio,0,0);
+  }
+  else if (!mute) {
+    image(audiofade,0,0);
+  }
+  if (mouseX >= 585 && mouseX <= 710 && mouseY >= 650 && mouseY <= 1180 && mute) {
+    image(audiohover,0,0);
+  }
+  else if (mouseX >= 585 && mouseX <= 710 && mouseY >= 650 && mouseY <= 1180 && !mute) {
+    image(audiofadehover,0,0);
   }
 }
