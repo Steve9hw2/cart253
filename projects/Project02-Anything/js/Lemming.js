@@ -12,7 +12,7 @@ class Lemming {
     this.vy = 1.2;
     this.ay = 0.5;
     this.maxGrav = 10;
-    this.number = undefined;
+    this.number = undefined; // # of lemming in the sequence
     this.scream = false;
     if (variation < 0) {
       variation = 0;
@@ -49,25 +49,25 @@ class Lemming {
     this.variant = variation;
   }
 
-  advance(startY) {
+  advance(startY,gameSpeed) {
     if (!this.moving && !this.collide && !this.safe && !this.falling && !this.dead) {
       this.x = -100 - 80*this.number ;
       this.y = startY;
     }
     else if (this.moving && !this.collide && !this.safe && !this.falling && !this.dead) {
-      this.x += this.speed;
+      this.x += this.speed*gameSpeed;
     }
   }
 
   gravity() {
-    this.vy += this.ay;
+    this.vy += this.ay * gameSpeed;
     this.vy = constrain(this.vy,-this.maxGrav,this.maxGrav);
-    this.y += this.vy
+    this.y += this.vy * gameSpeed
     this.falling = true;
   }
 
-  climb(y) {
-    this.y += y;
+  climb(y,gameSpeed) {
+    this.y += y*gameSpeed;
   }
 
 }

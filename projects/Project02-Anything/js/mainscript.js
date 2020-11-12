@@ -13,6 +13,7 @@ let lemmings = [];
 let numberOfLemmings = 50;
 let deadLemmings = 0;
 let savedLemmings = 0;
+
 let p5hatty;
 let lem0;
 let lem1;
@@ -26,8 +27,10 @@ let lemIcon;
 let lemIconSmall;
 let lemIconSaved;
 let lemIconDead;
+
 let menuPlayButton;
 let menuPlayFade;
+
 let clouds = [];
 let cloud;
 let maxPossibleClouds = 100;
@@ -48,6 +51,13 @@ let sceneTwo;
 let sceneThree;
 let sceneFour;
 let sceneFive;
+
+let gameSpeed = 1;
+let normalSpeed = 1;
+let fastSpeed = 5;
+let fastforward;
+let fastforwardfade;
+let fastforwardhover;
 
 let bg1_1;
 let bg1_2;
@@ -80,6 +90,7 @@ let loadTime = 3; // time, in seconds, spent in loading screens
 
 function preload() {
   p5hatty = loadFont(`assets/fonts/p5hatty.ttf`);
+  // lemmings
   lem7 = loadImage(`assets/images/WeirdLemming.png`);
   lem4 = loadImage(`assets/images/DarkLemming.png`);
   lem2 = loadImage(`assets/images/FancyLemming.png`);
@@ -88,14 +99,20 @@ function preload() {
   lem3 = loadImage(`assets/images/RedLemming.png`);
   lem5 = loadImage(`assets/images/ArcticLemming.png`);
   lem0 = loadImage(`assets/images/GoldLemming.png`);
+  // ui
   lemIcon = loadImage(`assets/images/LemmingIcon.png`);
   lemIconSmall = loadImage(`assets/images/LemmingIconSmall.png`);
   lemIconSaved = loadImage(`assets/images/LemmingIconSaved.png`);
   lemIconDead = loadImage(`assets/images/LemmingIconDead.png`);
   menuPlayButton = loadImage(`assets/images/Button.png`);
   menuPlayFade = loadImage(`assets/images/ButtonFade.png`);
+  fastforward = loadImage(`assets/images/FastForward.png`);
+  fastforwardfade = loadImage(`assets/images/FastForwardFade.png`);
+  fastforwardhover = loadImage(`assets/images/FastForwardHover.png`);
+  // dead lemmings
+  singe = loadImage(`assets/images/CrispLemming.png`);
+  // reusable section assets
   cloud = loadImage(`assets/images/cloud.png`);
-  singe = loadImage(`assets/images/CrispLemming.png`)
   // section specific assets
   bg1_1 = loadImage(`assets/images/sections/sec1-1.png`);
   bg1_2 = loadImage(`assets/images/sections/sec1-2.png`);
@@ -203,6 +220,7 @@ function loadScene(area, variant) {
   sceneSpecificDisplay(area.section, variant);
   sceneNameDisplay(area.section, variant);
   remainingDisplay();
+  fastForwardDisplay();
 }
 
 function startMenu() {
@@ -429,10 +447,10 @@ function sceneSpecificDisplay(area, variant) {
       image(totemfell,0,0);
     }
     playMusic(bgm1_1);
-    displayClouds(10,3);
+    displayClouds(10,3,gameSpeed);
     totemCheck();
-    moveLemmings(620);
-    checkGrav(pitStartX);
+    moveLemmings(620,gameSpeed);
+    checkGrav(pitStartX,gameSpeed);
     break;
     case 2: // 1-2
     image(bg1_2,0,0);
@@ -441,7 +459,7 @@ function sceneSpecificDisplay(area, variant) {
       image(bg1_2alt,0,0);
     }
     playMusic(bgm1_2);
-    moveLemmings(680);
+    moveLemmings(680,gameSpeed);
     sunCheck();
     checkSinge();
     break;
@@ -515,7 +533,7 @@ function sceneSpecificDisplay(area, variant) {
 function displayClouds(number, speed) {
   for (let i = 0; i < number; i++) {
     let cld = clouds[i];
-    cld.x -= speed;
+    cld.x -= speed * gameSpeed;
     if (cld.x < -400) {
       cld.x = 1700;
     }
@@ -523,12 +541,12 @@ function displayClouds(number, speed) {
   }
 }
 
-function moveLemmings(startY) {
+function moveLemmings(startY,gameSpeed) {
   for(let i = 0; i < numberOfLemmings; i++) {
     let lem = lemmings[i];
-    lem.advance(startY);
+    lem.advance(startY,gameSpeed);
     lem.moving = true;
-    lem.advance(startY);
+    lem.advance(startY,gameSpeed);
     if (lem.x > width && lem.safe === false && lem.dead === false) {
       lem.safe = true;
       lem.moving = false;
@@ -583,20 +601,26 @@ function stopMusic() {
 }
 
 function mouseClicked() {
-  let buttonWidth = 320;
-  let buttonHeight = 140;
-  let buttonX = 625;
-  let buttonY = 950;
-  if (mouseX >= 625 && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight && state == `start` ) {
+  if (mouseX >= 625 && mouseX <= 625 + 320 && mouseY >= 950 && mouseY <= 950 + 140 && state == `start` ) {
     state = `load`;
     nextState = `s1`;
     frameCheck = int(frameCount/30);
-  }
+  } // start game
+  if (state === `s1` || state === `s2` || state === `s3` || state === `s4` || state === `s5`) {
+    if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175) {
+      if (gameSpeed === normalSpeed) {
+        gameSpeed = fastSpeed;
+      }
+      else if (gameSpeed === fastSpeed) {
+        gameSpeed = normalSpeed;
+      }
+    }
+  } // fast forward
   if (state === `s1` && sceneOne == 1 && mouseX >= 390 && mouseX <= 500 && mouseY >= 30 && mouseY <= 750) { // 1-1 totem
     totemfallen = true;
     pitDisabled = true;
   }
-  if (state === `s1` && sceneOne == 2 && mouseX >= 680 && mouseX <= 970 && mouseY >= 20 && mouseY <= 320 && !sundisabled) {
+  if (state === `s1` && sceneOne == 2 && mouseX >= 680 && mouseX <= 970 && mouseY >= 20 && mouseY <= 320 && !sundisabled) { // 1-2 sun
     sundisabled = true;
 }
 }
@@ -613,7 +637,7 @@ function totemCheck() {
     for(let i = 0; i < numberOfLemmings; i++) {
       let lem = lemmings[i];
       if (lem.x > 480 && lem.x < 1180 && lem.falling === false) {
-      lem.climb(-0.4);
+      lem.climb(-0.4,gameSpeed);
       }
     }
   }
@@ -734,11 +758,15 @@ function sunCheck() {
   }
 }
 
-// function removeDead() {
-//   for(let i = 0; i < numberOfLemmings; i++) {
-//     let lem = lemmings[i];
-//     if (lem.dead) {
-//       lemmings.splice(i, 1);
-//     }
-//   }
-// }
+function fastForwardDisplay() {
+  if (gameSpeed === normalSpeed) {
+    image(fastforward,0,0);
+    print(mouseX, mouseY);
+  }
+  else if (gameSpeed === fastSpeed) {
+    image(fastforwardfade,0,0);
+  }
+  if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175) {
+    image(fastforwardhover,0,0);
+  }
+}
