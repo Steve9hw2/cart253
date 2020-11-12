@@ -59,14 +59,20 @@ class Ball {
     this.b2 = this.b - 50;
     this.flash = false;
     this.flashframe = 10;
+    this.active = true;
+
     this.speed = 3;
     this.vx = random(-this.speed,this.speed);
     this.vy = random(-this.speed,this.speed);
+    this.vxs = undefined;
+    this.vys = undefined;
+
     this.oscillator = new p5.Oscillator();
     this.nearFreq = 220;
     this.farFreq = 440;
     this.oscillator.amp(0.025);
     this.oscillator.start();
+
     this.note = note;
     this.synth = new p5.PolySynth();
   }
@@ -100,7 +106,7 @@ class Ball {
   }
 
   display() {
-    if (!this.flash) {
+    if (!this.flash && this.active) {
     push();
     noStroke();
     rectMode(CENTER,CENTER);
@@ -108,10 +114,17 @@ class Ball {
     rect(this.x,this.y,this.size,this.size,this.curvature);
     pop();
     }
+    else if (!this.active) {
+      push();
+      rectMode(CENTER,CENTER);
+      fill(this.r);
+      rect(this.x,this.y,this.size,this.size,this.curvature);
+      pop();
+    }
   }
 
   flashing() {
-    if (this.flash) {
+    if (this.flash && this.active) {
       if (this.flashframe > 0) {
         this.flashframe --;
         push();
@@ -125,6 +138,23 @@ class Ball {
         this.flash = false
         this.flashframe = 10;
       }
+    }
+  }
+
+  clicked() { // click on the ball to disable
+    if (mouseX < this.x + this.size/2 && mouseX > this.x - this.size/2 && mouseY < this.y + this.size/2 && mouseY > this.x - this.size/2 && this.active) {
+      this.active = false;
+      this.vxs = this.vx;
+      this.vys = this.vy;
+      this.vx = 0;
+      this.vy = 0;
+      this.oscillator.amp(0);
+    }
+    else if(mouseX < this.x + this.size/2 && mouseX > this.x - this.size/2 && mouseY < this.y + this.size/2 && mouseY > this.x - this.size/2 && !this.active) {
+      this.active = true;
+      this.vx = this.vxs;
+      this.vy = this.vys;
+      this.oscillator.amp(0.025);
     }
   }
 }

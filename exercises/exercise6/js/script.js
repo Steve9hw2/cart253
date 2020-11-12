@@ -11,12 +11,18 @@ modifying the sound activity.
 "use strict";
 
 let balls = [];
+let ballCount = 8;
 let notes = [`F3`,`G3`,`Ab4`,`Bb4`,`C4`,`Db4`,`Eb4`,`F4`];
 
 // setup()
 function setup() {
   createCanvas(600,600);
   userStartAudio();
+  for(let i = 0; i < ballCount; i++) {
+    let x = random(50,550);
+    let y = random(50,550);
+    createBall(x,y);
+  }
 }
 
 // draw()
@@ -32,7 +38,10 @@ function draw() {
 }
 
 function mousePressed() {
-  createBall(mouseX,mouseY);
+  for(let i = 0; i < balls.length; i++) {
+    let ball = balls[i]
+    ball.clicked();
+  }
 }
 
 function createBall(x,y) {
