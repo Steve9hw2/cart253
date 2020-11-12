@@ -1,3 +1,3 @@
-# Template p5 project
+# Lemmings
 
-This is the README file for the entire project. For more official projects you should write information here about the nature of the project, your name, any special explanations of how the project works, etc.
+This game is Steve Berthiume's submission for Project 02: Anything in Pippin Barr's CART 253. All images are original, while the music used for scenes is labelled. For more specific music credits, visit the musicCredits.txt file in assets/sounds/sectionmusic.

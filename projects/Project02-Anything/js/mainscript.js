@@ -1,12 +1,10 @@
 /**************************************************
-Project 2 Prototype
+Lemmings
 Steve Berthiaume
 
-This is a test for the final script. My goal here is
-to test switch statements (the more efficient conditional),
-test displaying scenes from a method, and to test
-randomized scenes.
+This is the main script for Lemmings.
 **************************************************/
+
 "use strict";
 
 let canvas;
