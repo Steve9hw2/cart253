@@ -14,6 +14,7 @@ class Lemming {
     this.maxGrav = 10;
     this.number = undefined; // # of lemming in the sequence
     this.scream = false;
+    this.singed = false;
     if (variation < 0) {
       variation = 0;
     }
@@ -49,9 +50,9 @@ class Lemming {
     this.variant = variation;
   }
 
-  advance(startY,gameSpeed) {
+  advance(delta,startY,gameSpeed) {
     if (!this.moving && !this.collide && !this.safe && !this.falling && !this.dead) {
-      this.x = -100 - 80*this.number ;
+      this.x = -100 - 80*(this.number-delta) ;
       this.y = startY;
     }
     else if (this.moving && !this.collide && !this.safe && !this.falling && !this.dead) {
