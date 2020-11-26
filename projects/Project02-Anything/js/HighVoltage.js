@@ -81,6 +81,41 @@ class HighVoltage {
         }
       }
 
+      lemdisplay() {
+        if (!lem.dead) {
+        switch(lem.variation) {
+          case 0:
+          image(lem0,lem.x,lem.y);
+          break;
+          case 1:
+          image(lem1,lem.x,lem.y);
+          break;
+          case 2:
+          image(lem2,lem.x,lem.y);
+          break;
+          case 3:
+          image(lem3,lem.x,lem.y);
+          break;
+          case 4:
+          image(lem4,lem.x,lem.y);
+          break;
+          case 5:
+          image(lem5,lem.x,lem.y);
+          break;
+          case 6:
+          image(lem6,lem.x,lem.y);
+          break;
+          case 7:
+          image(lem7,lem.x,lem.y);
+          break;
+        }
+        }
+        else if (lem.dead && lem.singed) {
+          image(singe,lem.x,lem.y);
+        }
+      }
+
+
     moveLemmings(startY, gameSpeed) {
         for(let i = 0; i < 50; i++) {
           let lem = lemmings[i];
@@ -97,10 +132,10 @@ class HighVoltage {
       }
 
     mousePressed() {
-        if (!wireleftiscut && mouseX >= 385 && mouseX <= 590 && mouseY >= 80 && mouseY <= 850 && state === `s2`) {
+        if (!wireleftiscut && mouseX >= 385 && mouseX <= 590 && mouseY >= 80 && mouseY <= 850) {
           wireleftiscut = true;
         }
-        if (!wirerightiscut && mouseX >= 1000 && mouseX <= 1600 && mouseY >= 235 && mouseY <= 1000 && state === `s2`) {
+        if (!wirerightiscut && mouseX >= 1000 && mouseX <= 1600 && mouseY >= 235 && mouseY <= 1000) {
           wirerightiscut = true;
         }
       }

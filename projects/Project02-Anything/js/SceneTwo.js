@@ -7,7 +7,7 @@ class SceneTwo {
     this.section = 1;
   }
 
-  update(variant) {
+  update(variant,lemmings) {
     switch(variant) {
       case 1:
       this.VariantOne();
@@ -39,14 +39,10 @@ class SceneTwo {
   }
 
   displayUI(area,variant) {
-    let leveltext;
     push();
     fill(224,166,49); // scene name display
-    textSize(60);
     textFont(p5hatty);
     textAlign(LEFT,CENTER);
-    leveltext = levelIndex[area][variant];
-    text(leveltext,50,1100);
     textSize(50); // remaining display
     text(`x `+ numberOfLemmings, 90, 1030);
     image(lemIconSmall,30,1000);
@@ -57,6 +53,18 @@ class SceneTwo {
     pop();
     this.displayAudio();
     this.displayFastForward();
+    this.displayLevel(area,variant);
+  }
+
+  displayLevel(area,variant) {
+    print(`level is being displayed`)
+    push();
+    fill(224,166,49); // scene name display
+    textSize(60);
+    textFont(p5hatty);
+    textAlign(LEFT,CENTER);
+    text(`2 - 1: High Voltage`,50,1100);
+    pop();
   }
 
   displayAudio() {
@@ -101,7 +109,7 @@ class SceneTwo {
       else if (savedLemmings + deadLemmings === numberOfLemmings && savedLemmings > 0) {
         state = "load";
         nextState = "s3";
-        stopMusic();
+        this.stopMusic();
         frameCheck = int(frameCount/30);
         numberOfLemmings -= deadLemmings;
         lemmingDelta += deadLemmings;
@@ -111,7 +119,6 @@ class SceneTwo {
   }
 
   mousePressed() {
-    sceneOne.mousePressed();
     if (state === `s1` || state === `s2` || state === `s3` || state === `s4` || state === `s5`) {
       if (mouseX >= 585 && mouseX <= 710 && mouseY >= 1070 && mouseY <= 1180) {
         if (!mute) {
@@ -121,11 +128,23 @@ class SceneTwo {
         }
         else if (mute) {
           currentbgm = storedbgm;
-          playMusic();
+          switch(v2) {
+            case 1:
+            highVoltage.playMusic();
+            break;
+          }
           mute = false;
         }
       }
     } // mute toggle
+  if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175) {
+    if (gameSpeed === normalSpeed) {
+      gameSpeed = fastSpeed;
+    }
+    else if (gameSpeed === fastSpeed) {
+      gameSpeed = normalSpeed;
+    }
+  } // fast forward toggle
   }
 
-}
+  }

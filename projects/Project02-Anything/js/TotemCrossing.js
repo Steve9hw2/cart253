@@ -125,7 +125,8 @@ class TotemCrossing {
       }
 
     mousePressed() {
-      if (state === `s1` && sceneOne == 1 && mouseX >= 390 && mouseX <= 500 && mouseY >= 30 && mouseY <= 750) { // 1-1 totem
+      if (mouseX >= 390 && mouseX <= 500 && mouseY >= 30 && mouseY <= 750) { // 1-1 totem
+          print('the totem has been pressed')
         totemfallen = true;
         pitDisabled = true;
       }

@@ -249,11 +249,9 @@ function draw() {
   switch(areaOne.section) {
     case 1:
     areaOne.update(v1,lemmings);
-    displayLevel(areaOne.section,areaOne.variation);
     break;
     case 2:
     areaOne.update(v1,lemmings);
-    displayLevel(areaOne.section,areaOne.variation);
     break;
     case 3:
     break;
@@ -266,8 +264,7 @@ function draw() {
   case "s2":
   switch(areaTwo.section) {
     case 1:
-    areaTwo.update(v2);
-    displayLevel(areaTwo.section,areaTwo.variation);
+    areaTwo.update(v2,lemmings);
     break;
     case 2:
     break;
@@ -490,16 +487,41 @@ function mouseClicked() {
   } // start game
 }
 
-function displayLevel(area,variant) {
-  push();
-  fill(224,166,49); // scene name display
-  textSize(60);
-  textFont(p5hatty);
-  textAlign(LEFT,CENTER);
-  leveltext = levelIndex[area][variant];
-  text(leveltext,50,1100);
-  pop();
+function mousePressed() {
+  switch(state) {
+    case "s1":
+    switch(v1){
+      case 1:
+      totemCrossing.mousePressed();
+      break;
+      case 2:
+      realScorcher.mousePressed();
+      break;
+    }
+    areaOne.mousePressed();
+    break;
+    case "s2":
+    switch(v2){
+      case 1:
+      highVoltage.mousePressed();
+      break;
+    }
+    areaTwo.mousePressed();
+    break;
+  }
 }
+
+// function displayLevel(area,variant) {
+//   print(`level is being displayed`)
+//   push();
+//   fill(224,166,49); // scene name display
+//   textSize(60);
+//   textFont(p5hatty);
+//   textAlign(LEFT,CENTER);
+//   leveltext = levelIndex[area][variant];
+//   text(leveltext,50,1100);
+//   pop();
+// }
 
 function checkEndS3() {
   if (deadLemmings === numberOfLemmings) {

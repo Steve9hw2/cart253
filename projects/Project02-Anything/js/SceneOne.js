@@ -16,7 +16,7 @@ class SceneOne {
       this.VariantTwo();
       break;
     }
-    this.displayUI();
+    this.displayUI(this.section,v1);
   }
 
   VariantOne() {
@@ -57,6 +57,19 @@ class SceneOne {
     pop();
     this.displayAudio();
     this.displayFastForward();
+    this.displayLevel(area,variant);
+  }
+
+  displayLevel(area,variant) {
+    print(`level is being displayed`)
+    push();
+    fill(224,166,49); // scene name display
+    textSize(60);
+    textFont(p5hatty);
+    textAlign(LEFT,CENTER);
+    leveltext = levelIndex[area][variant];
+    text(leveltext,50,1100);
+    pop();
   }
 
   displayAudio() {
@@ -102,7 +115,7 @@ class SceneOne {
         if (state === `s1`){
         state = "load";
         nextState = "s2";
-        stopMusic();
+        this.stopMusic();
         frameCheck = int(frameCount/30);
         numberOfLemmings -= deadLemmings;
         lemmingDelta += deadLemmings;
@@ -113,7 +126,6 @@ class SceneOne {
   }
 
   mousePressed() {
-    sceneOne.mousePressed();
     if (state === `s1` || state === `s2` || state === `s3` || state === `s4` || state === `s5`) {
       if (mouseX >= 585 && mouseX <= 710 && mouseY >= 1070 && mouseY <= 1180) {
         if (!mute) {
@@ -123,11 +135,26 @@ class SceneOne {
         }
         else if (mute) {
           currentbgm = storedbgm;
-          playMusic();
+          switch(v1) {
+            case 1:
+            totemCrossing.playMusic();
+            break;
+            case 2:
+            realScorcher.playMusic();
+            break;
+          }
           mute = false;
         }
       }
     } // mute toggle
+  if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175) {
+    if (gameSpeed === normalSpeed) {
+      gameSpeed = fastSpeed;
+    }
+    else if (gameSpeed === fastSpeed) {
+      gameSpeed = normalSpeed;
+    }
+  } // fast forward toggle
   }
 
 }

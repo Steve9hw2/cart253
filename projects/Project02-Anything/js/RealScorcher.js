@@ -97,7 +97,7 @@ class RealScorcher {
       }
 
     mousePressed() {
-        if (state === `s1` && sceneOne == 2 && mouseX >= 680 && mouseX <= 970 && mouseY >= 20 && mouseY <= 320 && !sundisabled) { // 1-2 sun
+        if (mouseX >= 680 && mouseX <= 970 && mouseY >= 20 && mouseY <= 320 && !sundisabled) { // 1-2 sun
           sundisabled = true;
     }
     }
