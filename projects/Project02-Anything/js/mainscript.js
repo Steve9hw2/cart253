@@ -16,6 +16,7 @@ let savedLemmings = 0;
 let lemmingDelta = 0;
 
 let p5hatty;
+let lem;
 let lem0;
 let lem1;
 let lem2;
@@ -46,11 +47,16 @@ let areaTwo;
 let areaThree;
 let areaFour;
 let areaFive;
-let sceneOne; // Scene: variation of the area
+let sceneOne; // Scene: method of the area
 let sceneTwo;
 let sceneThree;
 let sceneFour;
 let sceneFive;
+let v1; // v: numeric variation of the area
+let v2;
+let v3;
+let v4;
+let v5;
 
 let gameSpeed = 1;
 let normalSpeed = 1;
@@ -99,6 +105,17 @@ let scream;
 let singed;
 let shock;
 
+let currentVariant;
+let sceneOneVariants = [TotemCrossing,RealScorcher];
+let sceneTwoVariants = [HighVoltage];
+let sceneThreeVariants = [];
+let sceneFourVariants = [];
+let sceneFiveVariants = [];
+
+let totemCrossing = new TotemCrossing();
+let realScorcher = new RealScorcher();
+let highVoltage = new HighVoltage();
+
 let levelIndex = [
   [`N/A`,`N/A`,`N/A`,`N/A`,`N/A`,`N/A`], // index zero, empty
   [`N/A`,`1 - 1: Totem Crossing`, `1 - 2: A Real Scorcher`, `1 - 3: Undefined.`, `1 - 4: Undefined.`, `1 - 5: Undefined.`], // area one
@@ -107,6 +124,7 @@ let levelIndex = [
   [`N/A`,`4 - 1: Undefined.`, `4 - 2: Undefined.`, `4 - 3: Undefined.`, `4 - 4: Undefined.`, `4 - 5: Undefined.`], // area four
   [`N/A`,`5 - 1: Undefined.`, `5 - 2: Undefined.`, `5 - 3: Undefined.`, `5 - 4: Undefined.`, `5 - 5: Undefined.`], // area five
 ];
+let leveltext;
 
 let nextState; // used to track the next state after `load`
 let rotationDeg = 1; // initial rotation increment for loading screen icon (degrees)
@@ -179,17 +197,37 @@ function setup() {
     }
 
     // randomize sections
-    sceneOne = int(random(1,2.4));
-    sceneTwo = 1;
-    sceneThree = int(random(1,5));
-    sceneFour = int(random(1,5));
-    sceneFive = int(random(1,5));
+    sceneOne = random(sceneOneVariants);
+    sceneTwo = random(sceneTwoVariants);
+    sceneThree = random(sceneThreeVariants);
+    sceneFour = random(sceneFourVariants);
+    sceneFive = random(sceneFiveVariants);
+    switch(sceneOne) {
+      case TotemCrossing:
+      v1 = 1;
+      break;
+      case RealScorcher:
+      v1 = 2;
+      break;
+    }
+    switch(sceneTwo) {
+      case HighVoltage:
+      v2 = 1;
+    }
+    v3 = 1;
+    v4 = 1;
+    v5 = 1;
+    let currentVariantOne = new sceneOne(v1);
+    let currentVariantTwo = new sceneTwo(v2);
+    // let currentVariantThree = new sceneThree(v3);
+    // let currentVariantFour = new sceneFour(v4);
+    // let currentVariantFive = new sceneFive(v5);
 
-    areaOne = new SceneOne(sceneOne); // This creates a new scene object which stores its variation as this.variant
+    areaOne = new SceneOne(sceneOne);
     areaTwo = new SceneTwo(sceneTwo);
-    areaThree = new SceneThree(sceneThree);
-    areaFour = new SceneFour(sceneFour);
-    areaFive = new SceneFive(sceneFive);
+    // areaThree = new SceneThree(sceneThree);
+    // areaFour = new SceneFour(sceneFour);
+    // areaFive = new SceneFive(sceneFive);
     frameRate(30);
     for(let i = 0; i < maxPossibleClouds; i++) {
       let newCloud = {
@@ -208,24 +246,47 @@ function draw() {
   startMenu();
   break;
   case "s1":
-  loadScene(areaOne.section,areaOne.variant);
-  checkEndS1();
+  switch(areaOne.section) {
+    case 1:
+    areaOne.update(v1,lemmings);
+    displayLevel(areaOne.section,areaOne.variation);
+    break;
+    case 2:
+    areaOne.update(v1,lemmings);
+    displayLevel(areaOne.section,areaOne.variation);
+    break;
+    case 3:
+    break;
+    case 4:
+    break;
+    case 5:
+    break;
+  }
   break;
   case "s2":
-  loadScene(areaTwo.section,areaTwo.variant);
-  checkEndS2();
+  switch(areaTwo.section) {
+    case 1:
+    areaTwo.update(v2);
+    displayLevel(areaTwo.section,areaTwo.variation);
+    break;
+    case 2:
+    break;
+    case 3:
+    break;
+    case 4:
+    break;
+    case 5:
+    break;
+  }
   break;
   case "s3":
-  loadScene(areaThree.section,areaThree.variant);
-  checkEndS3();
+
   break;
   case "s4":
-  loadScene(areaFour.section,areaFour.variant);
-  checkEndS4();
+
   break;
   case "s5":
-  loadScene(areaFive.section,areaFive.variant);
-  checkEndS5();
+
   break;
   case "load":
   loadingScreen();
@@ -236,31 +297,6 @@ function draw() {
   loadFailScreen();
   break;
   }
-}
-
-function loadScene(area, variant) {
-  // switch (variant) {
-  //   case 1:
-  //   area.VariantOne();
-  //   break;
-  //   case 2:
-  //   area.VariantTwo();
-  //   break;
-  //   case 3:
-  //   area.VariantThree();
-  //   break;
-  //   case 4:
-  //   area.VariantFour();
-  //   break;
-  //   case 5:
-  //   area.VariantFive();
-  //   break;
-  // }
-  sceneSpecificDisplay(area, variant);
-  sceneNameDisplay(area, variant);
-  remainingDisplay();
-  fastForwardDisplay();
-  audioDisplay();
 }
 
 function startMenu() {
@@ -281,7 +317,7 @@ let menuLemX = 400;
 let menuLemY = 800;
 let spacing = 160;
   for (let i = 0; i < 5; i++) {
-    let lem = lemmings[i];
+    lem = lemmings[i];
     switch(lem.variant) {
       case 0:
       image(lem0,menuLemX,menuLemY);
@@ -320,12 +356,8 @@ let spacing = 160;
 }
 
 function menuLoadPlayButton() {
-  let buttonWidth = 320;
-  let buttonHeight = 140;
-  let buttonX = 625;
-  let buttonY = 950;
-  image(menuPlayButton,buttonX,buttonY);
-  if (mouseX >= 625 && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight ) {
+  image(menuPlayButton,625,950);
+  if (mouseX >= 625 && mouseX <= 625 + 320 && mouseY >= 950 && mouseY <= 950 + 140 ) {
     menuPlayButtonFade();
   }
 }
@@ -358,7 +390,7 @@ function loadingScreenLemmings() {
   let startY = 250;
   let currentY = 250;
   for (let i = 0; i < 50; i++) {
-    let lem = lemmings[i];
+    lem = lemmings[i];
     lem.moving = false;
     lem.safe = false;
     lem.collide = false;
@@ -450,331 +482,23 @@ function loadingTimer() {
     }
 }
 
-function sceneNameDisplay(area, variant) {
-    let leveltext;
-    push();
-    fill(224,166,49);
-    textSize(60);
-    textFont(p5hatty);
-    textAlign(LEFT,CENTER);
-    leveltext = levelIndex[area][variant];
-    text(leveltext,50,1100);
-    pop();
-    // print(levelIndex[area][variant])
-}
-
-function remainingDisplay() {
-  push();
-  fill(224,166,49);
-  textSize(50);
-  textFont(p5hatty);
-  textAlign(LEFT,CENTER);
-  text(`x `+ numberOfLemmings, 90, 1030);
-  image(lemIconSmall,30,1000);
-  image(lemIconDead,185,1000);
-  text(`x `+deadLemmings, 250, 1030);
-  image(lemIconSaved,335,1000);
-  text(`x `+savedLemmings, 400,1030);
-  pop();
-}
-
-function sceneSpecificDisplay(area, variant) {
-  switch (area) {
-    case 1:
-    switch (variant) {
-    case 1: // 1-1
-    image(bg1_1,0,0);
-    pitStartX = 500;
-    if (!totemfallen) {
-      image(totem,0,0);
-    }
-    else if (totemfallen) {
-      image(totemfell,0,0);
-    }
-    playMusic(bgm1_1);
-    displayClouds(10,3,gameSpeed);
-    totemCheck();
-    moveLemmings(620,gameSpeed);
-    checkGrav(pitStartX,gameSpeed);
-    break;
-    case 2: // 1-2
-    image(bg1_2,0,0);
-    pitStartX = undefined;
-    if (sundisabled) {
-      image(bg1_2alt,0,0);
-    }
-    playMusic(bgm1_2);
-    moveLemmings(680,gameSpeed);
-    sunCheck();
-    checkSinge();
-    break;
-    case 3: // 1-3
-    break;
-    case 4: // 1-4
-    break;
-    case 5: // 1-5
-    break;
-    }
-    break;
-    case 2:
-    switch (variant) {
-      case 1: // 2-1
-      image(bg2_1,0,0);
-      playMusic(bgm2_1);
-      if (wireleftiscut && wirerightiscut) {
-        image(bg2_1alt,0,0);
-      }
-      moveLemmings(760,gameSpeed);
-      wireLeftCheck();
-      wireRightCheck();
-      electrocution();
-      print(mouseX,mouseY);
-      break;
-      case 2: // 2-2
-      break;
-      case 3: // 2-3
-      break;
-      case 4: // 2-4
-      break;
-      case 5: // 2-5
-      break;
-    }
-    break;
-    case 3:
-    switch (variant) {
-      case 1: // 3-1
-      break;
-      case 2: // 3-2
-      break;
-      case 3: // 3-3
-      break;
-      case 4: // 3-4
-      break;
-      case 5: // 3-5
-      break;
-    }
-    break;
-    case 4:
-    switch (variant) {
-      case 1: // 4-1
-      break;
-      case 2: // 4-2
-      break;
-      case 3: // 4-3
-      break;
-      case 4: // 4-4
-      break;
-      case 5: // 4-5
-      break;
-    }
-    break;
-    case 5:
-    switch (variant) {
-      case 1:
-      break;
-      case 2:
-      break;
-      case 3:
-      break;
-      case 4:
-      break;
-      case 5:
-      break;
-    }
-    break;
-  }
-}
-
-function displayClouds(number, speed) {
-  for (let i = 0; i < number; i++) {
-    let cld = clouds[i];
-    cld.x -= speed * gameSpeed;
-    if (cld.x < -400) {
-      cld.x = 1700;
-    }
-    image(cloud,cld.x,cld.y);
-  }
-}
-
-function moveLemmings(startY,gameSpeed) {
-  for(let i = 0; i < 50; i++) {
-    let lem = lemmings[i];
-    lem.advance(lemmingDelta,startY,gameSpeed);
-    lem.moving = true;
-    lem.advance(lemmingDelta,startY,gameSpeed);
-    if (lem.x > width && lem.safe === false && lem.dead === false) {
-      lem.safe = true;
-      lem.moving = false;
-      savedLemmings ++;
-    }
-    lemdisplay(lem,lem.variation);
-  }
-}
-
-function lemdisplay(lem,variation) {
-  if (!lem.dead) {
-  switch(variation) {
-    case 0:
-    image(lem0,lem.x,lem.y);
-    break;
-    case 1:
-    image(lem1,lem.x,lem.y);
-    break;
-    case 2:
-    image(lem2,lem.x,lem.y);
-    break;
-    case 3:
-    image(lem3,lem.x,lem.y);
-    break;
-    case 4:
-    image(lem4,lem.x,lem.y);
-    break;
-    case 5:
-    image(lem5,lem.x,lem.y);
-    break;
-    case 6:
-    image(lem6,lem.x,lem.y);
-    break;
-    case 7:
-    image(lem7,lem.x,lem.y);
-    break;
-  }
-  }
-  else if (lem.dead && lem.singed) {
-    image(singe,lem.x,lem.y);
-  }
-}
-
-function playMusic(bgm) {
-  if (!musicPlaying) {
-    if (!mute) {
-    musicPlaying = true;
-    currentbgm = bgm;
-    currentbgm.play();
-    }
-  }
-}
-
-function stopMusic() {
-  currentbgm.stop();
-  musicPlaying = false;
-}
-
 function mouseClicked() {
   if (mouseX >= 625 && mouseX <= 625 + 320 && mouseY >= 950 && mouseY <= 950 + 140 && state == `start` ) {
     state = `load`;
     nextState = `s1`;
     frameCheck = int(frameCount/30);
   } // start game
-  if (state === `s1` || state === `s2` || state === `s3` || state === `s4` || state === `s5`) {
-    if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175) {
-      if (gameSpeed === normalSpeed) {
-        gameSpeed = fastSpeed;
-      }
-      else if (gameSpeed === fastSpeed) {
-        gameSpeed = normalSpeed;
-      }
-    }
-  } // fast forward toggle
-  if (state === `s1` || state === `s2` || state === `s3` || state === `s4` || state === `s5`) {
-    if (mouseX >= 585 && mouseX <= 710 && mouseY >= 1070 && mouseY <= 1180) {
-      if (!mute) {
-        storedbgm = currentbgm;
-        stopMusic();
-        mute = true;
-      }
-      else if (mute) {
-        currentbgm = storedbgm;
-        playMusic();
-        mute = false;
-      }
-    }
-  } // mute toggle
-  if (state === `s1` && sceneOne == 1 && mouseX >= 390 && mouseX <= 500 && mouseY >= 30 && mouseY <= 750) { // 1-1 totem
-    totemfallen = true;
-    pitDisabled = true;
-  }
-  if (state === `s1` && sceneOne == 2 && mouseX >= 680 && mouseX <= 970 && mouseY >= 20 && mouseY <= 320 && !sundisabled) { // 1-2 sun
-    sundisabled = true;
-}
-  if (!wireleftiscut && mouseX >= 385 && mouseX <= 590 && mouseY >= 80 && mouseY <= 850 && state === `s2`) {
-    wireleftiscut = true;
-  }
-  if (!wirerightiscut && mouseX >= 1000 && mouseX <= 1600 && mouseY >= 235 && mouseY <= 1000 && state === `s2`) {
-    wirerightiscut = true;
-  }
 }
 
-function totemCheck() {
-  let totemXStart = 390;
-  let totemXEnd = 500;
-  let totemYStart = 30;
-  let totemYEnd = 750;
-  if (mouseX >= totemXStart && mouseX <= totemXEnd && mouseY >= totemYStart && mouseY <= totemYEnd && !totemfallen && state === `s1`) {
-    image(totemhl,0,0)
-  }
-  if (totemfallen === true) {
-    for(let i = 0; i < numberOfLemmings; i++) {
-      let lem = lemmings[i];
-      if (lem.x > 480 && lem.x < 1180 && lem.falling === false) {
-      lem.climb(-0.4,gameSpeed);
-      }
-    }
-  }
-}
-
-function checkGrav() {
-  for(let i = 0; i < numberOfLemmings; i++) {
-    let lem = lemmings[i];
-    if (lem.x > pitStartX && pitDisabled === false || lem.falling === true) {
-    lem.gravity();
-    if (!lem.scream) {
-    lem.scream = true;
-    if (!mute) {
-    scream.play();
-    }
-    }
-    lemdisplay(lem,lem.variation);
-    }
-    if (lem.y > height && lem.dead === false) {
-      lem.dead = true;
-      deadLemmings ++;
-    }
-  }
-}
-
-function checkEndS1() {
-  if (deadLemmings === numberOfLemmings) {
-    state = "fail";
-  }
-  else if (savedLemmings + deadLemmings === numberOfLemmings && savedLemmings > 0) {
-    if (state === `s1`){
-    state = "load";
-    nextState = "s2";
-    stopMusic();
-    frameCheck = int(frameCount/30);
-    numberOfLemmings -= deadLemmings;
-    lemmingDelta += deadLemmings;
-    deadLemmings = 0;
-    savedLemmings = 0;
-  }
-  }
-}
-
-function checkEndS2() {
-  if (deadLemmings === numberOfLemmings) {
-    state = "fail";
-  }
-  else if (savedLemmings + deadLemmings === numberOfLemmings && savedLemmings > 0) {
-    state = "load";
-    nextState = "s3";
-    stopMusic();
-    frameCheck = int(frameCount/30);
-    numberOfLemmings -= deadLemmings;
-    lemmingDelta += deadLemmings;
-    deadLemmings = 0;
-    savedLemmings = 0;
-  }
+function displayLevel(area,variant) {
+  push();
+  fill(224,166,49); // scene name display
+  textSize(60);
+  textFont(p5hatty);
+  textAlign(LEFT,CENTER);
+  leveltext = levelIndex[area][variant];
+  text(leveltext,50,1100);
+  pop();
 }
 
 function checkEndS3() {
@@ -827,109 +551,4 @@ function loadFailScreen() {
   textAlign(CENTER,CENTER);
   text(`Extinction`,800,200);
   pop();
-}
-
-function checkSinge() {
-  for(let i = 0; i < numberOfLemmings; i++) {
-    let lem = lemmings[i];
-    if (lem.x >= 520 && lem.x <= 1000 && !sundisabled && !lem.dead) {
-      lem.dead = true;
-      lem.singed = true;
-      lem.moving = false;
-      deadLemmings ++;
-      image(singe,lem.x,lem.y);
-      if (!mute) {
-        singed.play()
-      }
-    }
-  }
-}
-
-function sunCheck() {
-  if (mouseX >= 680 && mouseX <= 970 && mouseY >= 20 && mouseY <= 320 && !sundisabled) {
-    image(sunhl,0,0)
-  }
-}
-
-function fastForwardDisplay() {
-  if (gameSpeed === normalSpeed) {
-    image(fastforward,0,0);
-  }
-  else if (gameSpeed === fastSpeed) {
-    image(fastforwardfade,0,0);
-  }
-  if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175 && gameSpeed === normalSpeed) {
-    image(fastforwardhover,0,0);
-  }
-  else if (mouseX >= 1455 && mouseX <= 1570 && mouseY >= 1075 && mouseY <= 1175 && gameSpeed === fastSpeed) {
-    image(fastforwardfadehover,0,0);
-  }
-}
-
-function audioDisplay() {
-  if (mute) {
-    image(audio,0,0);
-  }
-  else if (!mute) {
-    image(audiofade,0,0);
-  }
-  if (mouseX >= 585 && mouseX <= 710 && mouseY >= 650 && mouseY <= 1180 && mute) {
-    image(audiohover,0,0);
-  }
-  else if (mouseX >= 585 && mouseX <= 710 && mouseY >= 650 && mouseY <= 1180 && !mute) {
-    image(audiofadehover,0,0);
-  }
-}
-
-function wireLeftCheck() {
-  if (!wireleftiscut) {
-    image(wireleft,0,0);
-    drawStatic(370,590,700,880);
-  }
-  else if (wireleftiscut) {
-    image(wireleftcut,0,0);
-  }
-  if (!wireleftiscut && mouseX >= 385 && mouseX <= 590 && mouseY >= 80 && mouseY <= 850) {
-    image(wirelefthl,0,0);
-  }
-}
-
-function wireRightCheck() {
-  if (!wirerightiscut) {
-    image(wireright,0,0);
-    drawStatic(660,1600,800,1020);
-  }
-  else if (wirerightiscut) {
-    image(wirerightcut,0,0);
-  }
-  if (!wirerightiscut && mouseX >= 1000 && mouseX <= 1600 && mouseY >= 235 && mouseY <= 1000) {
-    image(wirerighthl,0,0);
-  }
-}
-
-function electrocution() {
-  for(let i = 0; i < 50; i++) {
-    let lem = lemmings[i];
-    if (lem.x >= 370 && lem.x <= 590 && !wireleftiscut && lem.moving === true || lem.x >= 660 && lem.x <= 1600 && !wirerightiscut && lem.moving === true) {
-      image(singe,lem.x,lem.y)
-      if (!lem.singed && !lem.dead) {
-        lem.moving = false;
-        lem.dead = true;
-        lem.singed = true;
-        deadLemmings ++;
-      shock.play();
-      }
-    }
-  }
-}
-
-function drawStatic(x1,x2,y1,y2) {
-  let staticCount = 30;
-  for(let i = 0; i < staticCount; i++) {
-  push();
-  stroke(56,228,228);
-  strokeWeight(3);
-  point(random(x1,x2),random(y1,y2))
-  pop();
-  }
 }
