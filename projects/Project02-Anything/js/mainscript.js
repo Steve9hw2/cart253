@@ -74,6 +74,7 @@ let bg1_2;
 let bg1_2alt;
 let bg2_1;
 let bg2_1alt;
+let bg3_1;
 
 let totemfallen = false; // Scene specific interactables
 let totem;
@@ -89,12 +90,18 @@ let wireright;
 let wirerighthl;
 let wirerightcut;
 let wirerightiscut = false;
+let buttonpressed = false;
+let buttonnot;
+let buttonis;
+let buttonhl;
+let buttonplatform;
 
 let currentbgm;
 let storedbgm;
 let bgm1_1;
 let bgm1_2;
 let bgm2_1;
+let bgm3_1;
 
 let audio;
 let audiofade;
@@ -105,22 +112,23 @@ let scream;
 let singed;
 let shock;
 
+let totemCrossing;
+let realScorcher;
+let highVoltage;
+let hazardPay;
+
 let currentVariant;
-let sceneOneVariants = [TotemCrossing,RealScorcher];
-let sceneTwoVariants = [HighVoltage];
-let sceneThreeVariants = [];
+let sceneOneVariants = [1,2];
+let sceneTwoVariants = [1];
+let sceneThreeVariants = [1];
 let sceneFourVariants = [];
 let sceneFiveVariants = [];
-
-let totemCrossing = new TotemCrossing();
-let realScorcher = new RealScorcher();
-let highVoltage = new HighVoltage();
 
 let levelIndex = [
   [`N/A`,`N/A`,`N/A`,`N/A`,`N/A`,`N/A`], // index zero, empty
   [`N/A`,`1 - 1: Totem Crossing`, `1 - 2: A Real Scorcher`, `1 - 3: Undefined.`, `1 - 4: Undefined.`, `1 - 5: Undefined.`], // area one
   [`N/A`,`2 - 1: High Voltage`, `2 - 2: Undefined.`, `2 - 3: Undefined.`, `2 - 4: Undefined.`, `2 - 5: Undefined.`], // area two
-  [`N/A`,`3 - 1: Undefined.`, `3 - 2: Undefined.`, `3 - 3: Undefined.`, `3 - 4: Undefined.`, `3 - 5: Undefined.`], // area three
+  [`N/A`,`3 - 1: Hazard Pay.`, `3 - 2: Undefined.`, `3 - 3: Undefined.`, `3 - 4: Undefined.`, `3 - 5: Undefined.`], // area three
   [`N/A`,`4 - 1: Undefined.`, `4 - 2: Undefined.`, `4 - 3: Undefined.`, `4 - 4: Undefined.`, `4 - 5: Undefined.`], // area four
   [`N/A`,`5 - 1: Undefined.`, `5 - 2: Undefined.`, `5 - 3: Undefined.`, `5 - 4: Undefined.`, `5 - 5: Undefined.`], // area five
 ];
@@ -132,6 +140,7 @@ let frameCheck; // used to track time elapsed in loading screens
 let loadTime = 3; // time, in seconds, spent in loading screens
 
 function preload() {
+
   p5hatty = loadFont(`assets/fonts/p5hatty.ttf`);
   // lemmings
   lem7 = loadImage(`assets/images/WeirdLemming.png`);
@@ -167,6 +176,7 @@ function preload() {
   bg1_2alt = loadImage(`assets/images/sections/sec1-2alt.png`)
   bg2_1 = loadImage(`assets/images/sections/sec2-1.png`);
   bg2_1alt = loadImage(`assets/images/sections/sec2-1alt.png`);
+  bg3_1 = loadImage(`assets/images/sections/sec3-1.png`)
   totem = loadImage(`assets/images/sections/totem.png`);
   totemhl = loadImage(`assets/images/sections/totemhighlight.png`);
   totemfell = loadImage(`assets/images/sections/totemfallen.png`);
@@ -177,9 +187,14 @@ function preload() {
   wireright = loadImage(`assets/images/sections/wireright.png`);
   wirerighthl = loadImage(`assets/images/sections/wirerighthighlight.png`);
   wirerightcut = loadImage(`assets/images/sections/wirerightcut.png`);
+  buttonis = loadImage(`assets/images/sections/buttonpressed.png`);
+  buttonnot = loadImage(`assets/images/sections/buttonunpressed.png`);
+  buttonhl = loadImage(`assets/images/sections/buttonhl.png`);
+  buttonplatform = loadImage(`assets/images/sections/buttonplatform.png`);
   bgm1_1 = loadSound(`assets/sounds/sectionmusic/1_1-CrashNST_Jungle_Rollers.mp3`);
   bgm1_2 = loadSound(`assets/sounds/sectionmusic/1_2-MonkeyBall_Desert.mp3`);
   bgm2_1 = loadSound(`assets/sounds/sectionmusic/2_1-CrashTWoC_H2_Oh_No.mp3`);
+  bgm3_1 = loadSound(`assets/sounds/sectionmusic/3_1-SRB2_Techno_Hill_1.mp3`)
   scream = loadSound(`assets/sounds/scream.mp3`);
   singed = loadSound(`assets/sounds/fire.mp3`);
   shock = loadSound(`assets/sounds/shock.mp3`);
@@ -195,39 +210,6 @@ function setup() {
       lemming.number = i;
       lemmings.push(lemming);
     }
-
-    // randomize sections
-    sceneOne = random(sceneOneVariants);
-    sceneTwo = random(sceneTwoVariants);
-    sceneThree = random(sceneThreeVariants);
-    sceneFour = random(sceneFourVariants);
-    sceneFive = random(sceneFiveVariants);
-    switch(sceneOne) {
-      case TotemCrossing:
-      v1 = 1;
-      break;
-      case RealScorcher:
-      v1 = 2;
-      break;
-    }
-    switch(sceneTwo) {
-      case HighVoltage:
-      v2 = 1;
-    }
-    v3 = 1;
-    v4 = 1;
-    v5 = 1;
-    let currentVariantOne = new sceneOne(v1);
-    let currentVariantTwo = new sceneTwo(v2);
-    // let currentVariantThree = new sceneThree(v3);
-    // let currentVariantFour = new sceneFour(v4);
-    // let currentVariantFive = new sceneFive(v5);
-
-    areaOne = new SceneOne(sceneOne);
-    areaTwo = new SceneTwo(sceneTwo);
-    // areaThree = new SceneThree(sceneThree);
-    // areaFour = new SceneFour(sceneFour);
-    // areaFive = new SceneFive(sceneFive);
     frameRate(30);
     for(let i = 0; i < maxPossibleClouds; i++) {
       let newCloud = {
@@ -236,6 +218,10 @@ function setup() {
       };
       clouds.push(newCloud);
     }
+    totemCrossing = new TotemCrossing();
+    realScorcher = new RealScorcher();
+    highVoltage = new HighVoltage();
+    hazardPay = new HazardPay();
 }
 
 // draw()
@@ -244,40 +230,16 @@ function draw() {
   switch (state) {
   case "start":
   startMenu();
+  randomizeSections();
   break;
   case "s1":
-  switch(areaOne.section) {
-    case 1:
-    areaOne.update(v1,lemmings);
-    break;
-    case 2:
-    areaOne.update(v1,lemmings);
-    break;
-    case 3:
-    break;
-    case 4:
-    break;
-    case 5:
-    break;
-  }
+  areaOne.update(v1,lemmings);
   break;
   case "s2":
-  switch(areaTwo.section) {
-    case 1:
-    areaTwo.update(v2,lemmings);
-    break;
-    case 2:
-    break;
-    case 3:
-    break;
-    case 4:
-    break;
-    case 5:
-    break;
-  }
+  areaTwo.update(v2,lemmings);
   break;
   case "s3":
-
+  areaThree.update(v3,lemmings);
   break;
   case "s4":
 
@@ -508,20 +470,53 @@ function mousePressed() {
     }
     areaTwo.mousePressed();
     break;
+    case "s3":
+    switch(v3){
+      case 1:
+      hazardPay.mousePressed();
+    }
+    areaThree.mousePressed();
+    break;
   }
 }
 
-// function displayLevel(area,variant) {
-//   print(`level is being displayed`)
-//   push();
-//   fill(224,166,49); // scene name display
-//   textSize(60);
-//   textFont(p5hatty);
-//   textAlign(LEFT,CENTER);
-//   leveltext = levelIndex[area][variant];
-//   text(leveltext,50,1100);
-//   pop();
-// }
+function randomizeSections() {
+  // randomize sections
+  sceneOne = random(sceneOneVariants);
+  sceneTwo = random(sceneTwoVariants);
+  sceneThree = random(sceneThreeVariants);
+  sceneFour = random(sceneFourVariants);
+  sceneFive = random(sceneFiveVariants);
+  switch(sceneOne) {
+    case 1:
+    v1 = 1;
+    break;
+    case 2:
+    v1 = 2;
+    break;
+  }
+  switch(sceneTwo) {
+    case 1:
+    v2 = 1;
+  }
+  switch(sceneThree) {
+    case 1:
+    v3 = 1;
+  }
+  v4 = 1;
+  v5 = 1;
+  let currentVariantOne = new SceneOne(v1);
+  let currentVariantTwo = new SceneTwo(v2);
+  // let currentVariantThree = new sceneThree(v3);
+  // let currentVariantFour = new sceneFour(v4);
+  // let currentVariantFive = new sceneFive(v5);
+
+  areaOne = new SceneOne(sceneOne);
+  areaTwo = new SceneTwo(sceneTwo);
+  areaThree = new SceneThree(sceneThree);
+  // areaFour = new SceneFour(sceneFour);
+  // areaFive = new SceneFive(sceneFive);
+}
 
 function checkEndS3() {
   if (deadLemmings === numberOfLemmings) {
