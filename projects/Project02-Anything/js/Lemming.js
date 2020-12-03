@@ -15,42 +15,11 @@ class Lemming {
     this.number = undefined; // # of lemming in the sequence
     this.scream = false;
     this.singed = false;
-    if (variation < 0) {
-      variation = 0;
-    }
-    if (variation > 7) {
-      variation = 7;
-    }
-    switch(variation) {
-      case 0:
-      this.speed = 1;
-      break;
-      case 1:
-      this.speed = 1;
-      break;
-      case 2:
-      this.speed = 1;
-      break;
-      case 3:
-      this.speed = 1;
-      break;
-      case 4:
-      this.speed = 1;
-      break;
-      case 5:
-      this.speed = 1;
-      break;
-      case 6:
-      this.speed = 1;
-      break;
-      case 7:
-      this.speed = 1;
-      break;
-    }
+    this.speed = 1;
     this.variant = variation;
   }
 
-  advance(delta,startY,gameSpeed) {
+  advance(delta,startY,gameSpeed) {   // moves the lemming if it's alive and ready to move, also offsets according to the number of dead.
     if (!this.moving && !this.collide && !this.safe && !this.falling && !this.dead) {
       this.x = -100 - 80*(this.number-delta) ;
       this.y = startY;

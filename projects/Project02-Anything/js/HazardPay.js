@@ -14,7 +14,6 @@ class HazardPay {
     this.buttonCheck();
     this.moveLemmings(760,gameSpeed);
     this.checkGrav(pitStartX,gameSpeed);
-    print(mouseX,mouseY);
   }
 
   playMusic(bgm) {
@@ -27,7 +26,7 @@ class HazardPay {
       }
     }
 
-    lemdisplay() {
+    lemdisplay(lem,variation) {
       if (!lem.dead) {
       switch(lem.variation) {
         case 0:

@@ -81,7 +81,7 @@ class HighVoltage {
         }
       }
 
-      lemdisplay() {
+      lemdisplay(lem,variation) {
         if (!lem.dead) {
         switch(lem.variation) {
           case 0:

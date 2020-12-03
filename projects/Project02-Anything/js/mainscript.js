@@ -9,15 +9,19 @@ This is the main script for Lemmings.
 
 let canvas;
 let state = "start" // start, s1, s2, s3, s4, s5, load, end, fail
-let lemmings = [];
+let lemmings = [];  // lemming array
 let numberOfLemmings = 50;
-let deadLemmings = 0;
-let savedLemmings = 0;
-let lemmingDelta = 0;
 
-let p5hatty;
-let lem;
-let lem0;
+let deadLemmings = 0; // values used for counters
+let savedLemmings = 0;
+
+let lemmingDelta = 0; // used for offsetting lemmings so that, as an example, if 3 die, number 4 will start at 1's position on the start of a scene. (See lemming object)
+
+let p5hatty;  // used font
+
+let lem; // temporary holder for index of the lemmings array
+
+let lem0; // images for different lemming types
 let lem1;
 let lem2;
 let lem3;
@@ -25,7 +29,8 @@ let lem4;
 let lem5;
 let lem6;
 let lem7;
-let lemIcon;
+
+let lemIcon;  // UI lemmings (loading + scenes)
 let lemIconSmall;
 let lemIconSaved;
 let lemIconDead;
@@ -58,10 +63,11 @@ let v3;
 let v4;
 let v5;
 
-let gameSpeed = 1;
+let gameSpeed = 1; // values for the game speed
 let normalSpeed = 1;
 let fastSpeed = 5;
-let fastforward;
+
+let fastforward; // fast forward for the UI
 let fastforwardfade;
 let fastforwardhover;
 let fastforwardfadehover;
@@ -69,14 +75,14 @@ let fastforwardfadehover;
 let mute = false;
 let musicPlaying = false;
 
-let bg1_1;
+let bg1_1; // backgrounds
 let bg1_2;
 let bg1_2alt;
 let bg2_1;
 let bg2_1alt;
 let bg3_1;
 
-let end;
+let end; // end screen images
 let ranka;
 let rankb;
 let rankc;
@@ -85,7 +91,7 @@ let ranke;
 let rankf;
 let ranks;
 
-let totemfallen = false; // Scene specific interactables
+let totemfallen = false; // Scene specific interactable bools and images for the respective states
 let totem;
 let totemfell;
 let totemhl;
@@ -105,35 +111,36 @@ let buttonis;
 let buttonhl;
 let buttonplatform;
 
-let currentbgm;
+let currentbgm; // values for the music in scenes
 let storedbgm;
 let bgm1_1;
 let bgm1_2;
 let bgm2_1;
 let bgm3_1;
 
-let audio;
+let audio;  // images for the sound display in the UI.
 let audiofade;
 let audiohover;
 let audiofadehover;
 
-let scream;
+let scream; // death noises
 let singed;
 let shock;
 
-let totemCrossing;
+let totemCrossing; // values storing level specific classes
 let realScorcher;
 let highVoltage;
 let hazardPay;
 
-let currentVariant;
-let sceneOneVariants = [1,2];
+let currentVariant; // current scene variant
+
+let sceneOneVariants = [1,2]; // possible variants of the scenes
 let sceneTwoVariants = [1];
 let sceneThreeVariants = [1];
 let sceneFourVariants = [];
 let sceneFiveVariants = [];
 
-let levelIndex = [
+let levelIndex = [  // the array which stores level names, used to display the level in scenes with multiple variants.
   [`N/A`,`N/A`,`N/A`,`N/A`,`N/A`,`N/A`], // index zero, empty
   [`N/A`,`1 - 1: Totem Crossing`, `1 - 2: A Real Scorcher`, `1 - 3: Undefined.`, `1 - 4: Undefined.`, `1 - 5: Undefined.`], // area one
   [`N/A`,`2 - 1: High Voltage`, `2 - 2: Undefined.`, `2 - 3: Undefined.`, `2 - 4: Undefined.`, `2 - 5: Undefined.`], // area two
@@ -148,7 +155,7 @@ let rotationDeg = 1; // initial rotation increment for loading screen icon (degr
 let frameCheck; // used to track time elapsed in loading screens
 let loadTime = 3; // time, in seconds, spent in loading screens
 
-function preload() {
+function preload() {  // all loading of images, sounds/music, and the font used.
 
   p5hatty = loadFont(`assets/fonts/p5hatty.ttf`);
   // lemmings
@@ -220,15 +227,21 @@ function preload() {
 // setup()
 function setup() {
     canvas = createCanvas(1600,1200);
-    for(let i = 0; i < numberOfLemmings; i++) {
+    for(let i = 0; i < numberOfLemmings; i++) {   // lemming definition for each index
       let lemming;
       let variation = int(randomGaussian(3,2));
+      if (variation < 0) {
+        variation = 0;
+      }
+      if (variation > 7) {
+        variation = 7;
+      }
       lemming = new Lemming(variation);
       lemming.number = i;
       lemmings.push(lemming);
     }
     frameRate(30);
-    for(let i = 0; i < maxPossibleClouds; i++) {
+    for(let i = 0; i < maxPossibleClouds; i++) { // defining of clouds for TotemCrossing (originally intended to be reusable, which is why it's here)
       let newCloud = {
         x:random(0,1600),
         y:random(-50,200),
@@ -242,7 +255,7 @@ function setup() {
 }
 
 // draw()
-function draw() {
+function draw() { // state switching
   print(state);
   switch (state) {
   case "start":
@@ -275,7 +288,7 @@ function draw() {
   }
 }
 
-function startMenu() {
+function startMenu() { // display for the start menu
     background(0);
     push();
     fill(224,166,49);
@@ -342,7 +355,7 @@ function menuPlayButtonFade() {
   image(menuPlayFade,625,950);
 }
 
-function loadingScreen() {
+function loadingScreen() {  // this parent function triggers all the components of the loading screen after displaying the remaining lemmings.
   background(0);
   push();
   fill(224,166,49);
@@ -357,7 +370,7 @@ function loadingScreen() {
   loadingTimer();
 }
 
-function loadingScreenLemmings() {
+function loadingScreenLemmings() {  // this function displays the lemmings on the loading screen, spacing them out appropriately and ignoring the dead.
   let spacing = 160;
   let vertSpacing = 100;
   let startX = 180;
@@ -442,7 +455,7 @@ function loadingScreenLemmings() {
 }
 }
 
-function loadingIcon() {
+function loadingIcon() { // disply lemming head on loading screen
   push();
   translate(1475,1075);
   angleMode(DEGREES);
@@ -452,13 +465,13 @@ function loadingIcon() {
   pop();
 }
 
-function loadingTimer() {
+function loadingTimer() { // this timer runs the next state after a set interval.
     if (int(frameCount/30) > frameCheck + loadTime) {
       state = nextState;
     }
 }
 
-function mouseClicked() {
+function mouseClicked() {   // this function handles the start button specifically.
   if (mouseX >= 625 && mouseX <= 625 + 320 && mouseY >= 950 && mouseY <= 950 + 140 && state == `start` ) {
     state = `load`;
     nextState = `s1`;
@@ -466,7 +479,7 @@ function mouseClicked() {
   } // start game
 }
 
-function mousePressed() {
+function mousePressed() {   // this function triggers the mousePressed of the active scenes.
   switch(state) {
     case "s1":
     switch(v1){
@@ -497,7 +510,7 @@ function mousePressed() {
   }
 }
 
-function randomizeSections() {
+function randomizeSections() {  // as the name says
   // randomize sections
   sceneOne = random(sceneOneVariants);
   sceneTwo = random(sceneTwoVariants);
@@ -546,7 +559,7 @@ function loadFailScreen() {
   pop();
 }
 
-function ending() {
+function ending() {   // handles displaying the end with the various ranks.
   image(end,0,0)
   push();
   fill(224,166,49);
