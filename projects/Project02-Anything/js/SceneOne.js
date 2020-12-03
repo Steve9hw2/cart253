@@ -61,7 +61,6 @@ class SceneOne {
   }
 
   displayLevel(area,variant) {
-    print(`level is being displayed`)
     push();
     fill(224,166,49); // scene name display
     textSize(60);

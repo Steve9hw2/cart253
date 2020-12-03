@@ -76,6 +76,15 @@ let bg2_1;
 let bg2_1alt;
 let bg3_1;
 
+let end;
+let ranka;
+let rankb;
+let rankc;
+let rankd;
+let ranke;
+let rankf;
+let ranks;
+
 let totemfallen = false; // Scene specific interactables
 let totem;
 let totemfell;
@@ -177,6 +186,14 @@ function preload() {
   bg2_1 = loadImage(`assets/images/sections/sec2-1.png`);
   bg2_1alt = loadImage(`assets/images/sections/sec2-1alt.png`);
   bg3_1 = loadImage(`assets/images/sections/sec3-1.png`)
+  end = loadImage(`assets/images/sections/End.png`);
+  ranks = loadImage(`assets/images/sections/RankS.png`);
+  ranka = loadImage(`assets/images/sections/RankA.png`);
+  rankb = loadImage(`assets/images/sections/RankB.png`);
+  rankc = loadImage(`assets/images/sections/RankC.png`);
+  rankd = loadImage(`assets/images/sections/RankD.png`);
+  ranke = loadImage(`assets/images/sections/RankE.png`);
+  rankf = loadImage(`assets/images/sections/RankF.png`);
   totem = loadImage(`assets/images/sections/totem.png`);
   totemhl = loadImage(`assets/images/sections/totemhighlight.png`);
   totemfell = loadImage(`assets/images/sections/totemfallen.png`);
@@ -242,15 +259,15 @@ function draw() {
   areaThree.update(v3,lemmings);
   break;
   case "s4":
-
+  state = "end";
   break;
   case "s5":
-
   break;
   case "load":
   loadingScreen();
   break;
   case "end":
+  ending();
   break;
   case "fail":
   loadFailScreen();
@@ -518,47 +535,6 @@ function randomizeSections() {
   // areaFive = new SceneFive(sceneFive);
 }
 
-function checkEndS3() {
-  if (deadLemmings === numberOfLemmings) {
-    state = "fail";
-  }
-  else if (savedLemmings + deadLemmings === numberOfLemmings && savedLemmings > 0) {
-    state = "load";
-    nextState = "s4";
-    frameCheck = int(frameCount/30);
-    numberOfLemmings -= deadLemmings;
-    lemmingDelta += deadLemmings;
-    deadLemmings = 0;
-    savedLemmings = 0;
-  }
-}
-
-function checkEndS4() {
-  if (deadLemmings === numberOfLemmings) {
-    state = "fail";
-  }
-  else if (savedLemmings + deadLemmings === numberOfLemmings && savedLemmings > 0) {
-    state = "load";
-    nextState = "s5";
-    frameCheck = int(frameCount/30);
-    numberOfLemmings -= deadLemmings;
-    lemmingDelta += deadLemmings;
-    deadLemmings = 0;
-    savedLemmings = 0;
-  }
-}
-
-function checkEndS5() {
-  if (deadLemmings === numberOfLemmings) {
-    state = "fail";
-  }
-  else if (savedLemmings + deadLemmings === numberOfLemmings && savedLemmings > 0) {
-    state = "load";
-    nextState = "end";
-    frameCheck = int(frameCount/30);
-  }
-}
-
 function loadFailScreen() {
   background(0);
   push();
@@ -568,4 +544,36 @@ function loadFailScreen() {
   textAlign(CENTER,CENTER);
   text(`Extinction`,800,200);
   pop();
+}
+
+function ending() {
+  image(end,0,0)
+  push();
+  fill(224,166,49);
+  textSize(120);
+  textFont(p5hatty);
+  textAlign(LEFT,CENTER);
+  text(numberOfLemmings,675,440);
+  pop();
+  if (numberOfLemmings === 50) {
+    image(ranks,0,0);
+  }
+  else if (numberOfLemmings >= 41 && numberOfLemmings <= 49) {
+    image(ranka,0,0);
+  }
+  else if (numberOfLemmings >= 31 && numberOfLemmings <= 40) {
+    image(rankb,0,0);
+  }
+  else if (numberOfLemmings >= 11 && numberOfLemmings <= 30) {
+    image(rankc,0,0);
+  }
+  else if (numberOfLemmings >= 6 && numberOfLemmings <= 10) {
+    image(rankd,0,0);
+  }
+  else if (numberOfLemmings >= 2 && numberOfLemmings <= 5) {
+    image(ranke,0,0);
+  }
+  else if (numberOfLemmings === 1) {
+    image(rankf,0,0);
+  }
 }
